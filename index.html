@@ -1561,8 +1561,8 @@
         showToast("Please upload an image file (PNG, JPG, WebP)", "error");
         return;
       }
-      if (file.size > 10 * 1024 * 1024) {
-        showToast("File size exceeds 10 MB limit", "error");
+      if (file.size > 15 * 1024 * 1024) {
+        showToast("File size exceeds 15 MB limit", "error");
         return;
       }
 
@@ -1572,8 +1572,29 @@
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        filePreviewThumb.src = e.target.result;
-        filePreviewPill.classList.add("active");
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1600;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, w, h);
+          filePreviewThumb.src = canvas.toDataURL("image/jpeg", 0.85);
+          filePreviewPill.classList.add("active");
+        };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
@@ -1699,21 +1720,23 @@
             timestamp: new Date().toISOString()
           };
 
-          if (attachedFile) {
-            payload.fileName = attachedFile.name;
-            payload.fileType = attachedFile.type;
+          if (attachedFile && filePreviewThumb.src) {
+            payload.fileName = attachedFile.name ? attachedFile.name.replace(/\.[^/.]+$/, ".jpg") : "screenshot.jpg";
+            payload.fileType = "image/jpeg";
             payload.fileData = filePreviewThumb.src.split(",")[1] || "";
           }
 
-          await fetch(CONFIG.appsScriptUrl, {
+          // Dispatched with keepalive so browser guarantees delivery in background without blocking the UI
+          fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
+            body: JSON.stringify(payload),
+            keepalive: true
+          }).catch(err => console.warn("Background sync dispatch:", err));
 
         } else {
-          // 2. Direct Google Form Submission using configured entry IDs
+          // 2. Direct Google Form Submission fallback
           const postData = new URLSearchParams();
           postData.append(CONFIG.entries.requestType, requestType);
           postData.append(CONFIG.entries.urgency, urgency);
@@ -1722,37 +1745,17 @@
           postData.append(CONFIG.entries.description, description);
           postData.append(CONFIG.entries.email, email);
 
-          // Silent hidden form submission to guarantee session cookie pass-through
-          const hiddenForm = document.createElement("form");
-          hiddenForm.method = "POST";
-          hiddenForm.action = CONFIG.googleFormUrl;
-          hiddenForm.target = "silentGoogleFormTarget";
-
-          for (const [k, v] of postData.entries()) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = k;
-            input.value = v;
-            hiddenForm.appendChild(input);
-          }
-          document.body.appendChild(hiddenForm);
-          hiddenForm.submit();
-          setTimeout(() => hiddenForm.remove(), 1000);
-
-          try {
-            await fetch(CONFIG.googleFormUrl, {
-              method: "POST",
-              mode: "no-cors",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: postData.toString()
-            });
-          } catch (fetchErr) {
-            console.warn("Fetch sent, iframe guaranteed delivery:", fetchErr);
-          }
+          fetch(CONFIG.googleFormUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: postData.toString(),
+            keepalive: true
+          }).catch(err => console.warn("Google Form post fallback:", err));
         }
 
-        // Realistic smooth transition delay
-        await new Promise(r => setTimeout(r, 600));
+        // Snappy, realistic responsive transition (300ms)
+        await new Promise(r => setTimeout(r, 300));
 
         // Generate Ticket Reference
         const ticketId = "#DUT-" + Math.floor(1000 + Math.random() * 9000);
