@@ -1081,26 +1081,12 @@
     </div>
 
     <div class="nav-right">
-      <div class="sync-status-badge" title="Direct real-time row logging to Google Sheets">
-        <span class="pulse-dot"></span>
-        <span>Google Sheets Live Sync</span>
-      </div>
-
       <!-- Theme Switcher (Dark / Light) -->
       <button type="button" class="icon-button" id="themeSwitchBtn" title="Toggle Dark/Light Mode">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       </button>
-
-      <!-- User Profile (Harshit Patel) -->
-      <div class="user-pill">
-        <div class="user-avatar-circle">HP</div>
-        <div class="user-text-meta">
-          <span class="user-name-title">Harshit Patel</span>
-          <span class="user-role-sub">Customer</span>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -1122,24 +1108,6 @@
 
       <div class="card-body-content">
 
-        <!-- Connected Notice Banner -->
-        <div class="connected-notice-banner">
-          <div class="notice-left">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <span>Connected to Google Form <strong>DUTRO Feedbacks</strong> &amp; linked spreadsheet</span>
-          </div>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/viewform" target="_blank" rel="noopener noreferrer" class="notice-link-btn">
-            <span>View Form</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-          </a>
-        </div>
 
         <!-- The Feedback Form -->
         <form id="feedbackForm" class="feedback-form" novalidate>
@@ -1352,7 +1320,6 @@
               type="email" 
               id="emailInput" 
               class="text-input" 
-              value="harshit.patel@dutient.ai" 
               placeholder="name@company.com" 
               autocomplete="email"
               required
@@ -1410,7 +1377,7 @@
             </div>
             <div class="receipt-item-row">
               <span class="receipt-label">Contact Email</span>
-              <span class="receipt-value" id="receiptMail">harshit.patel@dutient.ai</span>
+              <span class="receipt-value" id="receiptMail">—</span>
             </div>
           </div>
 
@@ -1820,7 +1787,7 @@
         // Reset Inputs
         form.reset();
         charCounter.textContent = "0 / 3000";
-        emailInput.value = "harshit.patel@dutient.ai";
+        emailInput.value = "";
         btnRemovePreview.click();
         syncUrgency();
 
@@ -1858,7 +1825,7 @@
       setTimeout(() => {
         syncUrgency();
         charCounter.textContent = "0 / 3000";
-        emailInput.value = "harshit.patel@dutient.ai";
+        emailInput.value = "";
       }, 50);
     });
   </script>
