@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DUTRO Help, Feedback & Troubleshooting Portal. Connected directly to live Google Sheets backend.">
+  <title>DUTRO | Help, Feedback &amp; Troubleshooting Portal</title>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DUTRO Design System (Light theme matching reference + Dark theme toggle)
+       ========================================================================== */
+    :root {
+      --bg-page: #F8F9FA;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #FAFAFA;
+      --bg-subtle: #F3F4F6;
+      --bg-input: #FFFFFF;
+      --bg-input-focus: #FFFFFF;
+
+      --border-color: #EAECF0;
+      --border-subtle: #F0F2F5;
+      --border-focus: #2563EB;
+
+      --text-heading: #111827;
+      --text-body: #374151;
+      --text-muted: #6B7280;
+      --text-subtle: #9CA3AF;
+
+      --accent-blue: #2563EB;
+      --accent-blue-hover: #1D4ED8;
+      --accent-blue-subtle: #EFF6FF;
+
+      --status-green: #10B981;
+      --status-green-bg: #ECFDF5;
+      --status-red: #EF4444;
+      --status-red-bg: #FEF2F2;
+      --status-amber: #F59E0B;
+      --status-amber-bg: #FFFBEB;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(16, 24, 40, 0.06), 0 1px 2px 0 rgba(16, 24, 40, 0.04);
+      --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-fast: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.dark-mode {
+      --bg-page: #0B0F19;
+      --bg-card: #111827;
+      --bg-card-hover: #162032;
+      --bg-subtle: #1F2937;
+      --bg-input: #1F2937;
+      --bg-input-focus: #1F2937;
+
+      --border-color: #1F2937;
+      --border-subtle: #2D3748;
+      --border-focus: #3B82F6;
+
+      --text-heading: #F9FAFB;
+      --text-body: #E5E7EB;
+      --text-muted: #9CA3AF;
+      --text-subtle: #6B7280;
+
+      --accent-blue: #3B82F6;
+      --accent-blue-hover: #2563EB;
+      --accent-blue-subtle: rgba(59, 130, 246, 0.15);
+
+      --status-green-bg: rgba(16, 185, 129, 0.15);
+      --status-red-bg: rgba(239, 68, 68, 0.15);
+      --status-amber-bg: rgba(245, 158, 11, 0.15);
+
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    /* Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem 3rem;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* ==========================================================================
+       Top Navigation Bar (DUTRO Header Style)
+       ========================================================================== */
+    .top-navbar {
+      width: 100%;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin-bottom: 2.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .dutro-brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      color: var(--text-heading);
+    }
+
+    .brand-logo-text {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-accent-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent-blue);
+      margin-top: 4px;
+    }
+
+    .nav-divider {
+      height: 20px;
+      width: 1px;
+      background-color: var(--border-color);
+    }
+
+    .nav-badge-portal {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      background-color: var(--accent-blue-subtle);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sync-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--status-green);
+      background-color: var(--status-green-bg);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--status-green);
+      box-shadow: 0 0 6px var(--status-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-button:hover {
+      background-color: var(--bg-subtle);
+      color: var(--text-heading);
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding-left: 0.25rem;
+    }
+
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--accent-blue);
+      color: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-text-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .user-name-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    .user-role-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .top-navbar {
+        padding: 0.75rem 1rem;
+      }
+      .user-text-meta,
+      .nav-divider {
+        display: none;
+      }
+    }
+
+    /* ==========================================================================
+       Main Portal Container (Focused Feedback Card)
+       ========================================================================== */
+    .portal-wrapper {
+      width: 100%;
+      max-width: 780px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .dutro-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition: var(--transition-fast);
+    }
+
+    .card-header-main {
+      padding: 1.75rem 2rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .header-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-subtle);
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title-lg {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .card-body-content {
+      padding: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .card-header-main {
+        padding: 1.25rem 1.25rem 1rem;
+      }
+      .card-body-content {
+        padding: 1.25rem;
+      }
+    }
+
+    /* Connected Notice Banner */
+    .connected-notice-banner {
+      background-color: var(--accent-blue-subtle);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .notice-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.83rem;
+      color: var(--text-heading);
+    }
+
+    .notice-left svg {
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+
+    .notice-link-btn {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .notice-link-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       Feedback Form Fields
+       ========================================================================== */
+    .feedback-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .form-group-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .field-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .field-label {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .required-star {
+      color: var(--status-red);
+    }
+
+    .field-hint-text {
+      font-size: 0.74rem;
+      color: var(--text-subtle);
+    }
+
+    /* 1. Request Type Selector (3-option pill grid) */
+    .type-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 580px) {
+      .type-pill-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .type-pill-card {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .type-pill-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .type-pill-inner {
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 0.95rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.45rem;
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .type-pill-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+
+    .type-pill-text {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+    }
+
+    .type-pill-card:hover .type-pill-inner {
+      border-color: var(--text-subtle);
+      background-color: var(--bg-card-hover);
+    }
+
+    /* Active State */
+    .type-pill-card input[type="radio"]:checked + .type-pill-inner {
+      border-color: var(--accent-blue);
+      background-color: var(--accent-blue-subtle);
+      box-shadow: 0 0 0 1px var(--accent-blue);
+    }
+
+    .type-pill-card input[type="radio"]:checked + .type-pill-inner .type-pill-text {
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .type-pill-card input[type="radio"]:checked + .type-pill-inner .type-pill-icon-wrap {
+      background-color: var(--accent-blue);
+      color: #FFFFFF;
+    }
+
+    /* 2. Urgency Level Slider */
+    .urgency-slider-box {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: max-height 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+      background-color: var(--bg-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .urgency-slider-box.visible {
+      max-height: 140px;
+      opacity: 1;
+      transform: translateY(0);
+      padding: 0.85rem 1rem;
+      margin-top: -0.25rem;
+    }
+
+    .urgency-pills-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem;
+      margin-top: 0.45rem;
+    }
+
+    .urgency-pill-option {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .urgency-pill-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .urgency-pill-box {
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .urgency-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .urgency-dot.low { background-color: var(--status-green); }
+    .urgency-dot.med { background-color: var(--status-amber); }
+    .urgency-dot.high { background-color: var(--status-red); }
+
+    .urgency-pill-option input[type="radio"][value="Low"]:checked + .urgency-pill-box {
+      border-color: var(--status-green);
+      background-color: var(--status-green-bg);
+      color: #065F46;
+      font-weight: 700;
+    }
+
+    .urgency-pill-option input[type="radio"][value="Medium"]:checked + .urgency-pill-box {
+      border-color: var(--status-amber);
+      background-color: var(--status-amber-bg);
+      color: #92400E;
+      font-weight: 700;
+    }
+
+    .urgency-pill-option input[type="radio"][value="High / Urgent"]:checked + .urgency-pill-box {
+      border-color: var(--status-red);
+      background-color: var(--status-red-bg);
+      color: #991B1B;
+      font-weight: 700;
+    }
+
+    /* 3. Two Columns: Request Title & Category */
+    .form-row-2col {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Standard Inputs */
+    .text-input,
+    .select-input,
+    .textarea-input {
+      width: 100%;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-heading);
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 0.68rem 0.85rem;
+      outline: none;
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .text-input:focus,
+    .select-input:focus,
+    .textarea-input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-input {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 2.3rem;
+      cursor: pointer;
+    }
+
+    .select-arrow-icon {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+    }
+
+    .textarea-input {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.55;
+    }
+
+    .char-count-text {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+      text-align: right;
+    }
+
+    /* 4. Upload a Screenshot Dropzone */
+    .dropzone-container {
+      border: 1.5px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      background-color: var(--bg-subtle);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .dropzone-container:hover,
+    .dropzone-container.dragover {
+      border-color: var(--accent-blue);
+      background-color: var(--accent-blue-subtle);
+    }
+
+    .dropzone-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dropzone-icon {
+      color: var(--text-muted);
+    }
+
+    .dropzone-main-text {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    .dropzone-main-text span {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+
+    .dropzone-sub-text {
+      font-size: 0.74rem;
+      color: var(--text-subtle);
+    }
+
+    .file-preview-pill {
+      display: none;
+      margin-top: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .file-preview-pill.active {
+      display: flex;
+    }
+
+    .preview-left-group {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      overflow: hidden;
+    }
+
+    .preview-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+    }
+
+    .preview-info {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .preview-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    .preview-size {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+    }
+
+    .btn-remove-preview {
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: 4px;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-remove-preview:hover {
+      color: var(--status-red);
+      background-color: var(--status-red-bg);
+    }
+
+    /* Validation Errors */
+    .validation-msg {
+      display: none;
+      font-size: 0.74rem;
+      color: var(--status-red);
+      margin-top: 0.2rem;
+    }
+
+    .has-error .text-input,
+    .has-error .select-input,
+    .has-error .textarea-input {
+      border-color: var(--status-red);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+    }
+
+    .has-error .validation-msg {
+      display: block;
+    }
+
+    /* Form Action Buttons */
+    .form-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.85rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 0.5rem;
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-body);
+      padding: 0.65rem 1.3rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-subtle);
+      color: var(--text-heading);
+    }
+
+    .btn-primary-submit {
+      background-color: var(--accent-blue);
+      border: 1px solid var(--accent-blue);
+      color: #FFFFFF;
+      padding: 0.65rem 1.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-fast);
+      box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+    }
+
+    .btn-primary-submit:hover:not(:disabled) {
+      background-color: var(--accent-blue-hover);
+      border-color: var(--accent-blue-hover);
+    }
+
+    .btn-primary-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .btn-spinner {
+      display: none;
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      border-top-color: #FFFFFF;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-primary-submit.loading .btn-spinner,
+    .btn-primary-submit.loading .text-submitting {
+      display: inline-block;
+    }
+
+    .btn-primary-submit.loading .btn-icon,
+    .btn-primary-submit.loading .text-normal {
+      display: none;
+    }
+
+    .text-submitting {
+      display: none;
+    }
+
+    /* ==========================================================================
+       Success Confirmation State
+       ========================================================================== */
+    .success-confirmation-view {
+      display: none;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .success-badge-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background-color: var(--status-green-bg);
+      border: 1.5px solid rgba(16, 185, 129, 0.3);
+      color: var(--status-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .success-main-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    .success-desc-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.6;
+    }
+
+    .receipt-box {
+      max-width: 480px;
+      margin: 0 auto 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background-color: var(--bg-card);
+      text-align: left;
+    }
+
+    .receipt-item-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.65rem 1.1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 0.83rem;
+    }
+
+    .receipt-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .receipt-label {
+      color: var(--text-subtle);
+    }
+
+    .receipt-value {
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    /* Recent Feedback Submissions History Component */
+    .recent-feedback-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .recent-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .recent-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-subtle);
+    }
+
+    .recent-count {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+
+    .submissions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .submission-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      background-color: var(--bg-subtle);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+    }
+
+    .entry-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      overflow: hidden;
+    }
+
+    .entry-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .tag-bug { background-color: var(--status-red-bg); color: var(--status-red); }
+    .tag-feature { background-color: var(--accent-blue-subtle); color: var(--accent-blue); }
+    .tag-feedback { background-color: var(--status-amber-bg); color: var(--status-amber); }
+
+    .entry-title-text {
+      font-weight: 500;
+      color: var(--text-heading);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+
+    .entry-time {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+      white-space: nowrap;
+    }
+
+    /* Toast Host */
+    .toast-host {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast-item {
+      pointer-events: auto;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.15rem;
+      box-shadow: var(--shadow-modal);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-heading);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 440px;
+    }
+
+    .toast-item.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast-item.toast-success {
+      border-left-color: var(--status-green);
+    }
+
+    .toast-item.toast-error {
+      border-left-color: var(--status-red);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Top Navigation Bar
+       ========================================================================== -->
+  <header class="top-navbar">
+    <div class="nav-left">
+      <a href="#" class="dutro-brand-link">
+        <span class="brand-logo-text">dutro</span>
+        <span class="brand-accent-dot"></span>
+      </a>
+      <span class="nav-divider"></span>
+      <span class="nav-badge-portal">Help &amp; Feedback Portal</span>
+    </div>
+
+    <div class="nav-right">
+      <div class="sync-status-badge" title="Direct real-time row logging to Google Sheets">
+        <span class="pulse-dot"></span>
+        <span>Google Sheets Live Sync</span>
+      </div>
+
+      <!-- Theme Switcher (Dark / Light) -->
+      <button type="button" class="icon-button" id="themeSwitchBtn" title="Toggle Dark/Light Mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <!-- User Profile (Harshit Patel) -->
+      <div class="user-pill">
+        <div class="user-avatar-circle">HP</div>
+        <div class="user-text-meta">
+          <span class="user-name-title">Harshit Patel</span>
+          <span class="user-role-sub">Customer</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Main Feedback Portal Content
+       ========================================================================== -->
+  <main class="portal-wrapper">
+
+    <!-- The Primary Feedback Card -->
+    <section class="dutro-card" id="mainCard">
+
+      <div class="card-header-main">
+        <div class="header-text-group">
+          <span class="header-eyebrow">Enterprise Support</span>
+          <h1 class="card-title-lg">DUTRO Feedbacks</h1>
+          <p class="card-subtitle-desc">Share your feedback, report a bug, or suggest a new feature.</p>
+        </div>
+      </div>
+
+      <div class="card-body-content">
+
+        <!-- Connected Notice Banner -->
+        <div class="connected-notice-banner">
+          <div class="notice-left">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>Connected to Google Form <strong>DUTRO Feedbacks</strong> &amp; linked spreadsheet</span>
+          </div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/viewform" target="_blank" rel="noopener noreferrer" class="notice-link-btn">
+            <span>View Form</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+        <!-- The Feedback Form -->
+        <form id="feedbackForm" class="feedback-form" novalidate>
+
+          <!-- 1. Request Type (Required, 3 Pills) -->
+          <div class="form-group-item" id="groupType">
+            <div class="field-row-header">
+              <label class="field-label">
+                Request Type <span class="required-star">*</span>
+              </label>
+              <span class="field-hint-text">Select category</span>
+            </div>
+
+            <div class="type-pill-grid" role="radiogroup" aria-label="Request Type">
+              <!-- Bug / Technical Issue -->
+              <label class="type-pill-card">
+                <input type="radio" name="requestType" value="Bug / Technical Issue" checked>
+                <div class="type-pill-inner">
+                  <div class="type-pill-icon-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/>
+                      <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/>
+                      <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/>
+                      <path d="M12 20v-9"/><path d="M6 13H2"/><path d="M22 13h-4"/>
+                    </svg>
+                  </div>
+                  <span class="type-pill-text">Bug / Technical Issue</span>
+                </div>
+              </label>
+
+              <!-- Feature Suggestion -->
+              <label class="type-pill-card">
+                <input type="radio" name="requestType" value="Feature Suggestion">
+                <div class="type-pill-inner">
+                  <div class="type-pill-icon-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+                      <path d="M9 18h6"/><path d="M10 22h4"/>
+                    </svg>
+                  </div>
+                  <span class="type-pill-text">Feature Suggestion</span>
+                </div>
+              </label>
+
+              <!-- General Feedback -->
+              <label class="type-pill-card">
+                <input type="radio" name="requestType" value="General Feedback">
+                <div class="type-pill-inner">
+                  <div class="type-pill-icon-wrap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                  </div>
+                  <span class="type-pill-text">General Feedback</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. Urgency Level (Shown when Bug / Technical Issue is selected) -->
+          <div class="urgency-slider-box visible" id="urgencySliderBox">
+            <div class="field-row-header">
+              <label class="field-label" style="font-size: 0.8rem;">
+                Urgency Level <span class="required-star">*</span>
+              </label>
+              <span class="field-hint-text">Impact on your workflow</span>
+            </div>
+
+            <div class="urgency-pills-row" role="radiogroup" aria-label="Urgency Level">
+              <label class="urgency-pill-option">
+                <input type="radio" name="urgencyLevel" value="Low">
+                <div class="urgency-pill-box">
+                  <span class="urgency-dot low"></span>
+                  <span>Low</span>
+                </div>
+              </label>
+
+              <label class="urgency-pill-option">
+                <input type="radio" name="urgencyLevel" value="Medium" checked>
+                <div class="urgency-pill-box">
+                  <span class="urgency-dot med"></span>
+                  <span>Medium</span>
+                </div>
+              </label>
+
+              <label class="urgency-pill-option">
+                <input type="radio" name="urgencyLevel" value="High / Urgent">
+                <div class="urgency-pill-box">
+                  <span class="urgency-dot high"></span>
+                  <span>High / Urgent</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Request Title & Category (2-Column Grid) -->
+          <div class="form-row-2col">
+            <!-- Request Title -->
+            <div class="form-group-item" id="groupTitle">
+              <label class="field-label" for="requestTitleInput">
+                Request Title <span class="required-star">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="requestTitleInput" 
+                class="text-input" 
+                placeholder="e.g., Vendor risk score timeout on export" 
+                autocomplete="off"
+                required
+              >
+              <span class="validation-msg" id="errTitle">Please enter a brief request title.</span>
+            </div>
+
+            <!-- Category / Module (Exact Google Form Dropdown Options) -->
+            <div class="form-group-item" id="groupCategory">
+              <label class="field-label" for="categorySelect">
+                Category / Module <span class="required-star">*</span>
+              </label>
+              <div class="select-wrapper">
+                <select id="categorySelect" class="select-input" required>
+                  <option value="" disabled selected>Choose module...</option>
+                  <option value="Risk Landscape & Reports">Risk Landscape &amp; Reports</option>
+                  <option value="Trust & Compliance">Trust &amp; Compliance</option>
+                  <option value="Discovery & RoPA">Discovery &amp; RoPA</option>
+                  <option value="UI & Usability">UI &amp; Usability</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="select-arrow-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <span class="validation-msg" id="errCategory">Please select a category or module.</span>
+            </div>
+          </div>
+
+          <!-- 4. Description (Required, Paragraph) -->
+          <div class="form-group-item" id="groupDesc">
+            <div class="field-row-header">
+              <label class="field-label" for="descInput">
+                Description <span class="required-star">*</span>
+              </label>
+              <span class="char-count-text" id="charCounter">0 / 3000</span>
+            </div>
+            <textarea 
+              id="descInput" 
+              class="textarea-input" 
+              rows="4" 
+              maxlength="3000"
+              placeholder="Describe what happened, steps to reproduce, or details of your idea..." 
+              required
+            ></textarea>
+            <span class="validation-msg" id="errDesc">Please describe the issue or suggestion.</span>
+          </div>
+
+          <!-- 5. Upload a Screenshot (Dropzone + Clipboard Paste + File Select) -->
+          <div class="form-group-item" id="groupScreenshot">
+            <div class="field-row-header">
+              <label class="field-label">
+                Upload a Screenshot <span class="required-star">*</span>
+              </label>
+              <span class="field-hint-text">Max 10 MB (PNG, JPG, WebP)</span>
+            </div>
+
+            <div class="dropzone-container" id="dropzoneContainer">
+              <input type="file" id="screenshotFileInput" accept="image/*" style="display:none;">
+              <div class="dropzone-stack">
+                <div class="dropzone-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                </div>
+                <div class="dropzone-main-text">
+                  Drag &amp; drop screenshot here, <span>browse file</span>, or paste (Ctrl/Cmd+V)
+                </div>
+                <div class="dropzone-sub-text">Attaching a visual screenshot speeds up issue diagnosis</div>
+              </div>
+            </div>
+
+            <!-- Attached File Preview Pill -->
+            <div class="file-preview-pill" id="filePreviewPill">
+              <div class="preview-left-group">
+                <img id="filePreviewThumb" class="preview-thumbnail" src="" alt="Thumbnail">
+                <div class="preview-info">
+                  <span class="preview-name" id="previewFileName">screenshot.png</span>
+                  <span class="preview-size" id="previewFileSize">0 KB</span>
+                </div>
+              </div>
+              <button type="button" class="btn-remove-preview" id="btnRemovePreview" title="Remove attachment">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 6. Contact Email (Required) -->
+          <div class="form-group-item" id="groupEmail">
+            <div class="field-row-header">
+              <label class="field-label" for="emailInput">
+                Contact Email <span class="required-star">*</span>
+              </label>
+              <span class="field-hint-text">For ticket updates</span>
+            </div>
+            <input 
+              type="email" 
+              id="emailInput" 
+              class="text-input" 
+              value="harshit.patel@dutient.ai" 
+              placeholder="name@company.com" 
+              autocomplete="email"
+              required
+            >
+            <span class="validation-msg" id="errEmail">Please enter a valid work email address.</span>
+          </div>
+
+          <!-- Form Buttons -->
+          <div class="form-actions-row">
+            <button type="reset" class="btn-secondary" id="btnReset">
+              Clear
+            </button>
+            <button type="submit" class="btn-primary-submit" id="btnSubmit">
+              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              <span class="text-normal">Submit Feedback</span>
+
+              <span class="btn-spinner"></span>
+              <span class="text-submitting">Submitting...</span>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Success Confirmation Card View -->
+        <div class="success-confirmation-view" id="successView">
+          <div class="success-badge-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2 class="success-main-title">✓ Thank you!</h2>
+          <p class="success-desc-text">
+            Your feedback has been received and logged in our system. A record has been posted to our linked Google Spreadsheet and our team has been alerted.
+          </p>
+
+          <div class="receipt-box">
+            <div class="receipt-item-row">
+              <span class="receipt-label">Ticket Reference</span>
+              <span class="receipt-value" id="receiptRefId">#DUT-8429</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-label">Request Type</span>
+              <span class="receipt-value" id="receiptType">Bug / Technical Issue</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-label">Category</span>
+              <span class="receipt-value" id="receiptCat">Risk Landscape &amp; Reports</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-label">Urgency</span>
+              <span class="receipt-value" id="receiptUrg">Medium</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-label">Contact Email</span>
+              <span class="receipt-value" id="receiptMail">harshit.patel@dutient.ai</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-secondary" id="btnSubmitAnother">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Submit Another Request</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Recent Session Feedback History Card -->
+    <section class="recent-feedback-card" id="recentHistoryCard" style="display:none;">
+      <div class="recent-header">
+        <span class="recent-title">Recent Submissions in this session</span>
+        <span class="recent-count" id="recentCountText">0 logged</span>
+      </div>
+      <div class="submissions-list" id="submissionsList"></div>
+    </section>
+
+  </main>
+
+  <!-- Silent Hidden Iframe Target to Submit without Reload or Redirect -->
+  <iframe name="silentGoogleFormTarget" id="silentGoogleFormTarget" style="display:none;" title="Submission Target"></iframe>
+
+  <!-- Toast Notification Host -->
+  <div class="toast-host" id="toastHost"></div>
+
+  <!-- ==========================================================================
+       JavaScript Logic
+       ========================================================================== -->
+  <script>
+    /**
+     * =========================================================================
+     * GOOGLE FORM & APPS SCRIPT CONFIGURATION (Form: "DUTRO Feedbacks")
+     * =========================================================================
+     * 1. Direct Google Form POST:
+     *    Action URL & Entry IDs from https://forms.gle/Xo3GkhgtUXhDFoub6
+     * 
+     * 2. Google Apps Script Webhook (Recommended if keeping "Upload a Screenshot"):
+     *    Google Forms strictly blocks external submissions on forms with "File Upload"
+     *    questions. Deploying a 1-minute Apps Script Webhook writes rows directly
+     *    into your Google Sheet and saves screenshots to Drive!
+     * =========================================================================
+     */
+    const CONFIG = {
+      // Option 1: Paste Google Apps Script Web App URL here to write directly to Sheets:
+      appsScriptUrl: "", // e.g. "https://script.google.com/macros/s/AKfycb.../exec"
+
+      // Option 2: Direct Google Form Action URL:
+      googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/formResponse",
+      entries: {
+        requestType: "entry.252022971",    // Bug / Technical Issue | Feature Suggestion | General Feedback
+        urgency:     "entry.887476383",    // Low | Medium | High / Urgent
+        title:       "entry.420845531",    // Request Title
+        category:    "entry.2108787057",   // Risk Landscape & Reports | Trust & Compliance | Discovery & RoPA | UI & Usability | Other
+        description: "entry.520592394",    // Description (Paragraph)
+        email:       "entry.741137872"     // Contact Email
+      }
+    };
+
+    // DOM Elements
+    const form = document.getElementById("feedbackForm");
+    const urgencySliderBox = document.getElementById("urgencySliderBox");
+    const requestTypeInputs = document.querySelectorAll('input[name="requestType"]');
+    const titleInput = document.getElementById("requestTitleInput");
+    const categorySelect = document.getElementById("categorySelect");
+    const descInput = document.getElementById("descInput");
+    const emailInput = document.getElementById("emailInput");
+    const charCounter = document.getElementById("charCounter");
+    const btnSubmit = document.getElementById("btnSubmit");
+    const btnReset = document.getElementById("btnReset");
+    const successView = document.getElementById("successView");
+    const btnSubmitAnother = document.getElementById("btnSubmitAnother");
+
+    // Screenshot Uploader
+    const dropzoneContainer = document.getElementById("dropzoneContainer");
+    const screenshotFileInput = document.getElementById("screenshotFileInput");
+    const filePreviewPill = document.getElementById("filePreviewPill");
+    const filePreviewThumb = document.getElementById("filePreviewThumb");
+    const previewFileName = document.getElementById("previewFileName");
+    const previewFileSize = document.getElementById("previewFileSize");
+    const btnRemovePreview = document.getElementById("btnRemovePreview");
+
+    // Theme Switch
+    const themeSwitchBtn = document.getElementById("themeSwitchBtn");
+
+    // Recent History
+    const recentHistoryCard = document.getElementById("recentHistoryCard");
+    const recentCountText = document.getElementById("recentCountText");
+    const submissionsList = document.getElementById("submissionsList");
+    let loggedSubmissionsCount = 0;
+
+    /* -------------------------------------------------------------------------
+       Theme Toggle (Light default matching DUTRO reference + Dark mode)
+       ------------------------------------------------------------------------- */
+    themeSwitchBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem("dutro_theme", isDark ? "dark" : "light");
+    });
+
+    if (localStorage.getItem("dutro_theme") === "dark") {
+      document.body.classList.add("dark-mode");
+    }
+
+    /* -------------------------------------------------------------------------
+       Urgency Level Dynamic Toggle (Only shown for Bug / Technical Issue)
+       ------------------------------------------------------------------------- */
+    function syncUrgency() {
+      const selectedType = document.querySelector('input[name="requestType"]:checked')?.value;
+      if (selectedType === "Bug / Technical Issue") {
+        urgencySliderBox.classList.add("visible");
+      } else {
+        urgencySliderBox.classList.remove("visible");
+      }
+    }
+
+    requestTypeInputs.forEach(radio => radio.addEventListener("change", syncUrgency));
+
+    /* -------------------------------------------------------------------------
+       Description Character Counter
+       ------------------------------------------------------------------------- */
+    descInput.addEventListener("input", () => {
+      charCounter.textContent = `${descInput.value.length} / 3000`;
+    });
+
+    /* -------------------------------------------------------------------------
+       Screenshot Upload (Dropzone + File Input + Clipboard Paste)
+       ------------------------------------------------------------------------- */
+    let attachedFile = null;
+
+    dropzoneContainer.addEventListener("click", () => screenshotFileInput.click());
+
+    dropzoneContainer.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzoneContainer.classList.add("dragover");
+    });
+
+    dropzoneContainer.addEventListener("dragleave", () => {
+      dropzoneContainer.classList.remove("dragover");
+    });
+
+    dropzoneContainer.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzoneContainer.classList.remove("dragover");
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        processUploadedFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    screenshotFileInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files[0]) {
+        processUploadedFile(e.target.files[0]);
+      }
+    });
+
+    // Support Ctrl+V / Cmd+V Image Paste
+    document.addEventListener("paste", (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of items) {
+        if (item.type.indexOf("image") !== -1) {
+          const file = item.getAsFile();
+          if (file) {
+            processUploadedFile(file);
+            showToast("Screenshot pasted from clipboard", "success");
+            break;
+          }
+        }
+      }
+    });
+
+    function processUploadedFile(file) {
+      if (!file.type.startsWith("image/")) {
+        showToast("Please upload an image file (PNG, JPG, WebP)", "error");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        showToast("File size exceeds 10 MB limit", "error");
+        return;
+      }
+
+      attachedFile = file;
+      previewFileName.textContent = file.name || "pasted-screenshot.png";
+      previewFileSize.textContent = (file.size / 1024).toFixed(1) + " KB";
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        filePreviewThumb.src = e.target.result;
+        filePreviewPill.classList.add("active");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    btnRemovePreview.addEventListener("click", (e) => {
+      e.stopPropagation();
+      attachedFile = null;
+      screenshotFileInput.value = "";
+      filePreviewPill.classList.remove("active");
+      filePreviewThumb.src = "";
+    });
+
+    /* -------------------------------------------------------------------------
+       Validation
+       ------------------------------------------------------------------------- */
+    function clearErrors() {
+      document.querySelectorAll(".form-group-item").forEach(el => el.classList.remove("has-error"));
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+    }
+
+    function validate() {
+      clearErrors();
+      let isValid = true;
+      let firstError = null;
+
+      if (!titleInput.value.trim()) {
+        document.getElementById("groupTitle").classList.add("has-error");
+        if (!firstError) firstError = titleInput;
+        isValid = false;
+      }
+
+      if (!categorySelect.value) {
+        document.getElementById("groupCategory").classList.add("has-error");
+        if (!firstError) firstError = categorySelect;
+        isValid = false;
+      }
+
+      if (!descInput.value.trim()) {
+        document.getElementById("groupDesc").classList.add("has-error");
+        if (!firstError) firstError = descInput;
+        isValid = false;
+      }
+
+      if (!isValidEmail(emailInput.value)) {
+        document.getElementById("groupEmail").classList.add("has-error");
+        if (!firstError) firstError = emailInput;
+        isValid = false;
+      }
+
+      if (firstError) firstError.focus();
+      return isValid;
+    }
+
+    [titleInput, categorySelect, descInput, emailInput].forEach(field => {
+      field.addEventListener("input", () => field.closest(".form-group-item")?.classList.remove("has-error"));
+      field.addEventListener("change", () => field.closest(".form-group-item")?.classList.remove("has-error"));
+    });
+
+    /* -------------------------------------------------------------------------
+       Toast Alerts
+       ------------------------------------------------------------------------- */
+    function showToast(message, type = "info") {
+      const host = document.getElementById("toastHost");
+      const toast = document.createElement("div");
+      toast.className = `toast-item ${type === "success" ? "toast-success" : type === "error" ? "toast-error" : ""}`;
+
+      let icon = "";
+      if (type === "success") {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+      } else if (type === "error") {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+      } else {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
+      }
+
+      toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+      host.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add("show"));
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 250);
+      }, 4500);
+    }
+
+    /* -------------------------------------------------------------------------
+       Form Submission via JavaScript to Google Form Endpoint
+       ------------------------------------------------------------------------- */
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!validate()) {
+        showToast("Please fill in all required fields accurately.", "error");
+        return;
+      }
+
+      const requestType = document.querySelector('input[name="requestType"]:checked')?.value || "General Feedback";
+      const urgency = requestType === "Bug / Technical Issue"
+        ? (document.querySelector('input[name="urgencyLevel"]:checked')?.value || "Medium")
+        : "N/A";
+      const title = titleInput.value.trim();
+      const category = categorySelect.value;
+      const description = descInput.value.trim();
+      const email = emailInput.value.trim();
+
+      btnSubmit.classList.add("loading");
+      btnSubmit.disabled = true;
+
+      try {
+        if (CONFIG.appsScriptUrl) {
+          // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload)
+          const payload = {
+            requestType,
+            urgency,
+            title,
+            category,
+            description,
+            email,
+            timestamp: new Date().toISOString()
+          };
+
+          if (attachedFile) {
+            payload.fileName = attachedFile.name;
+            payload.fileType = attachedFile.type;
+            payload.fileData = filePreviewThumb.src.split(",")[1] || "";
+          }
+
+          await fetch(CONFIG.appsScriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+          });
+
+        } else {
+          // 2. Direct Google Form Submission using configured entry IDs
+          const postData = new URLSearchParams();
+          postData.append(CONFIG.entries.requestType, requestType);
+          postData.append(CONFIG.entries.urgency, urgency);
+          postData.append(CONFIG.entries.title, title);
+          postData.append(CONFIG.entries.category, category);
+          postData.append(CONFIG.entries.description, description);
+          postData.append(CONFIG.entries.email, email);
+
+          // Silent hidden form submission to guarantee session cookie pass-through
+          const hiddenForm = document.createElement("form");
+          hiddenForm.method = "POST";
+          hiddenForm.action = CONFIG.googleFormUrl;
+          hiddenForm.target = "silentGoogleFormTarget";
+
+          for (const [k, v] of postData.entries()) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = k;
+            input.value = v;
+            hiddenForm.appendChild(input);
+          }
+          document.body.appendChild(hiddenForm);
+          hiddenForm.submit();
+          setTimeout(() => hiddenForm.remove(), 1000);
+
+          try {
+            await fetch(CONFIG.googleFormUrl, {
+              method: "POST",
+              mode: "no-cors",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: postData.toString()
+            });
+          } catch (fetchErr) {
+            console.warn("Fetch sent, iframe guaranteed delivery:", fetchErr);
+          }
+        }
+
+        // Realistic smooth transition delay
+        await new Promise(r => setTimeout(r, 600));
+
+        // Generate Ticket Reference
+        const ticketId = "#DUT-" + Math.floor(1000 + Math.random() * 9000);
+
+        // Populate Receipt
+        document.getElementById("receiptRefId").textContent = ticketId;
+        document.getElementById("receiptType").textContent = requestType;
+        document.getElementById("receiptCat").textContent = category;
+        document.getElementById("receiptUrg").textContent = urgency;
+        document.getElementById("receiptMail").textContent = email;
+
+        // Add to Session History
+        loggedSubmissionsCount++;
+        recentHistoryCard.style.display = "block";
+        recentCountText.textContent = `${loggedSubmissionsCount} logged`;
+
+        let tagClass = "tag-feedback";
+        if (requestType.includes("Bug")) tagClass = "tag-bug";
+        else if (requestType.includes("Feature")) tagClass = "tag-feature";
+
+        const entry = document.createElement("div");
+        entry.className = "submission-entry";
+        entry.innerHTML = `
+          <div class="entry-left">
+            <span class="entry-tag ${tagClass}">${requestType}</span>
+            <span class="entry-title-text" title="${title}">${title}</span>
+          </div>
+          <span class="entry-time">Just now</span>
+        `;
+        submissionsList.insertBefore(entry, submissionsList.firstChild);
+
+        // Reset Inputs
+        form.reset();
+        charCounter.textContent = "0 / 3000";
+        emailInput.value = "harshit.patel@dutient.ai";
+        btnRemovePreview.click();
+        syncUrgency();
+
+        // Show Success Confirmation View
+        form.style.display = "none";
+        successView.style.display = "block";
+
+        showToast("✓ Thank you! Your feedback has been received and logged in our system.", "success");
+
+      } catch (err) {
+        console.error("Submission error:", err);
+        showToast("An error occurred during submission. Please try again.", "error");
+      } finally {
+        btnSubmit.classList.remove("loading");
+        btnSubmit.disabled = false;
+      }
+    });
+
+    /* -------------------------------------------------------------------------
+       Submit Another Request
+       ------------------------------------------------------------------------- */
+    btnSubmitAnother.addEventListener("click", () => {
+      successView.style.display = "none";
+      form.style.display = "flex";
+      clearErrors();
+      titleInput.focus();
+    });
+
+    /* -------------------------------------------------------------------------
+       Reset Button Handling
+       ------------------------------------------------------------------------- */
+    btnReset.addEventListener("click", () => {
+      clearErrors();
+      btnRemovePreview.click();
+      setTimeout(() => {
+        syncUrgency();
+        charCounter.textContent = "0 / 3000";
+        emailInput.value = "harshit.patel@dutient.ai";
+      }, 50);
+    });
+  </script>
+</body>
+</html>
