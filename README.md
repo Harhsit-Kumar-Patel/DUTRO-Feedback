@@ -11,27 +11,34 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 - **Top Navigation Bar**:
   - `dutro` brand mark with blue accent dot
   - `Help & Feedback Portal` badge
-  - `Google Sheets Live Sync` status pill (🟢)
   - Theme Switcher (🌙 Dark Mode / ☀️ Light Mode)
-  - User profile avatar: `HP` (*Harshit Patel, Customer*)
 - **Feedback & Troubleshooting Card**:
   - Focused, centered enterprise card layout (`max-width: 780px`)
-  - Form status badge with direct Google Form link
   - **7 Pure Feedback Fields**:
     1. **Request Type \***: 3-option pill toggle (`Bug / Technical Issue`, `Feature Suggestion`, `General Feedback`)
     2. **Urgency Level \***: Dynamic slider (`Low`, `Medium`, `High / Urgent` - revealed when Bug is selected)
     3. **Request Title \***: Short text input
     4. **Category / Module \***: Dropdown (`Risk Landscape & Reports`, `Trust & Compliance`, `Discovery & RoPA`, `UI & Usability`, `Other`)
     5. **Description \***: Paragraph textarea with live character counter (`0 / 3000`)
-    6. **Upload a Screenshot \***: Drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) with preview & removal
-    7. **Contact Email \***: Pre-filled with `harshit.patel@dutient.ai`
-  - Action buttons: `Clear` and `Submit Feedback` (with loading spinner state)
+    6. **Upload a Screenshot \***: Drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) with canvas compression
+    7. **Contact Email \***: Work email input with validation
+  - Action buttons: `Clear` and `Submit Feedback` (with instant non-blocking background dispatch)
 - **In-Page Confirmation State**:
   - Reference ticket code generation (e.g. `#DUT-6191`)
   - Full receipt summary
   - `Submit Another Request` action
 - **Session Submissions Feed**:
   - Real-time logging of submissions completed during the user's active session
+
+---
+
+## 📊 Connected Google Spreadsheet & Webhook
+
+- **Live Spreadsheet**: [DUTRO Feedbacks (Responses)](https://docs.google.com/spreadsheets/d/1PU1MA0SbN233uLvYfaU8YpjMGRJn7Wc5Bz03pyu93Lo/edit?gid=1605365138)
+- **Google Apps Script Webhook Endpoint**:
+  ```text
+  https://script.google.com/macros/s/AKfycbyJjvLpeR4y1tppEOF7gM4MebcK0xjYP-T1qSEo5r_mmDU-2FfEndNA8gHUO_6nIFTRlA/exec
+  ```
 
 ---
 
