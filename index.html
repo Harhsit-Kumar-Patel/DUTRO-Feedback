@@ -1720,16 +1720,29 @@
             timestamp: new Date().toISOString()
           };
 
-          if (attachedFile && filePreviewThumb.src) {
-            payload.fileName = attachedFile.name ? attachedFile.name.replace(/\.[^/.]+$/, ".jpg") : "screenshot.jpg";
-            payload.fileType = "image/jpeg";
-            payload.fileData = filePreviewThumb.src.split(",")[1] || "";
+          if (attachedFile) {
+            payload.fileName = attachedFile.name || "screenshot.jpg";
+            payload.fileType = attachedFile.type || "image/jpeg";
+            payload.mimeType = attachedFile.type || "image/jpeg";
+
+            if (filePreviewThumb.src && filePreviewThumb.src.startsWith("data:")) {
+              payload.fileData = filePreviewThumb.src.split(",")[1];
+            } else {
+              payload.fileData = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const base64 = reader.result ? reader.result.split(",")[1] : "";
+                  resolve(base64);
+                };
+                reader.onerror = () => resolve("");
+                reader.readAsDataURL(attachedFile);
+              });
+            }
           }
 
           await fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
-            credentials: "include",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
           });

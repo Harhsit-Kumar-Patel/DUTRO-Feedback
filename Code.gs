@@ -13,8 +13,9 @@ function doPost(e) {
     if (data.fileData) {
       try {
         var folder = DriveApp.getFolderById(FOLDER_ID);
-        var contentType = data.fileType || "image/jpeg";
+        var contentType = data.fileType || data.mimeType || "image/jpeg";
         var fileName = data.fileName || "screenshot.jpg";
+        console.log("Received file upload: " + fileName + " (" + contentType + "), base64 length: " + data.fileData.length);
         var decoded = Utilities.base64Decode(data.fileData);
         var blob = Utilities.newBlob(decoded, contentType, fileName);
         var file = folder.createFile(blob);
