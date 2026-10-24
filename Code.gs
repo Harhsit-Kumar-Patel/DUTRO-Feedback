@@ -100,3 +100,8 @@ function onFormSubmit(e) {
     console.error("onFormSubmit error: " + err);
   }
 }
+
+// Run this once inside Apps Script to grant Drive write permissions
+function authorizeDrive() {
+  DriveApp.getRootFolder();
+}
