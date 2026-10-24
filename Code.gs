@@ -1,113 +1,85 @@
-// Configuration
-var FOLDER_ID = "1rQPbR3_Bb2ZdRh4rsTDlQHboqBWRUqIHTE2MjjCJCDFtS3XpXxW5QvAIJ5LSzXT-co-8RTyt";
+const FOLDER_ID = "1rQPbR3_Bb2ZdRh4rsTDlQHboqBWRUqIHTE2MjjCJCDFtS3XpXxW5QvAIJ5LSzXT-co-8RTyt";
+const SPREADSHEET_ID = "1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ";
+const SHEET_NAME = "Form responses 1";
 
 function doPost(e) {
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("Form responses 1") || ss.getActiveSheet();
-    var data = JSON.parse(e.postData.contents);
-    var fileUrl = "N/A";
-    var directImgUrl = "";
+  const lock = LockService.getScriptLock();
+  lock.tryLock(10000); // Prevent race conditions on concurrent row appends
 
-    // 1. If screenshot is attached, save to your dedicated Google Drive folder
-    if (data.fileData) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    let fileUrl = "N/A";
+    let fileId = "";
+
+    // 1. Process and save the screenshot if provided
+    if (data.fileData && data.fileName) {
       try {
-        var folder = DriveApp.getFolderById(FOLDER_ID);
-        var contentType = data.fileType || data.mimeType || "image/jpeg";
-        var fileName = data.fileName || "screenshot.jpg";
-        console.log("Received file upload: " + fileName + " (" + contentType + "), base64 length: " + data.fileData.length);
-        var decoded = Utilities.base64Decode(data.fileData);
-        var blob = Utilities.newBlob(decoded, contentType, fileName);
-        var file = folder.createFile(blob);
-        
-        // Ensure file is viewable with link
+        const folder = DriveApp.getFolderById(FOLDER_ID);
+        const decodedBytes = Utilities.base64Decode(data.fileData);
+        const blob = Utilities.newBlob(decodedBytes, data.mimeType || "image/png", data.fileName);
+        const file = folder.createFile(blob);
+
+        // Make the file viewable with link
         try {
           file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
         } catch (shareErr) {
           console.warn("Share warning: " + shareErr);
         }
 
-        var fileId = file.getId();
         fileUrl = file.getUrl();
-        // Direct thumbnail URL for Google Sheets =IMAGE() formula
-        directImgUrl = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1000";
-      } catch (fileErr) {
-        console.error("Drive upload error: " + fileErr);
+        fileId = file.getId();
+      } catch (driveErr) {
+        console.error("Drive upload error: " + driveErr);
       }
     }
 
-    // 2. Append new ticket row (Columns A through I)
-    var timestamp = new Date();
+    // 2. Locate sheet (works for both container-bound and standalone scripts)
+    const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+    const nextRow = sheet.getLastRow() + 1;
+
+    // 3. Prepare preview formula for Column I
+    const previewFormula = fileId 
+      ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000", 1)` 
+      : "";
+
+    // 4. Append row matching Columns A through I
     sheet.appendRow([
-      timestamp,
-      data.requestType || "",
-      data.urgency || "N/A",
-      data.title || "",
-      data.category || "",
-      data.description || "",
-      fileUrl,
-      data.email || "",
-      directImgUrl ? '=IMAGE("' + directImgUrl + '", 1)' : ""
+      new Date(),              // A: Timestamp
+      data.requestType || "",  // B: Request Type
+      data.urgency || "",      // C: Urgency Level
+      data.title || "",        // D: Request Title
+      data.category || "",     // E: Category / Module
+      data.description || "",  // F: Description
+      fileUrl,                 // G: Upload a Screenshot
+      data.email || "",        // H: Contact Email
+      previewFormula           // I: Screenshot Preview
     ]);
 
-    // 3. Set row height & embed cell image preview if uploaded
-    var lastRow = sheet.getLastRow();
-    if (directImgUrl) {
-      sheet.setRowHeight(lastRow, 80);
-      try {
-        var cellImage = SpreadsheetApp.newCellImage().setSourceUrl(directImgUrl).build();
-        sheet.getRange(lastRow, 9).setValue(cellImage);
-      } catch (imgErr) {
-        // Fallback formula is already in place from appendRow
-        sheet.getRange(lastRow, 9).setFormula('=IMAGE("' + directImgUrl + '", 1)');
-      }
+    // Set row height so the thumbnail is clearly visible
+    if (fileId) {
+      sheet.setRowHeight(nextRow, 80);
     }
 
-    return ContentService.createTextOutput(JSON.stringify({ status: "success" }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      fileUrl: fileUrl
+    })).setMimeType(ContentService.MimeType.JSON);
 
-  } catch (err) {
-    console.error("Error in doPost: " + err);
-    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+
+  } finally {
+    lock.releaseLock();
   }
 }
 
-// Fallback: If native Google Form is submitted directly
-function onFormSubmit(e) {
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("Form responses 1") || ss.getActiveSheet();
-    var row = e ? e.range.getRow() : sheet.getLastRow();
-    if (row <= 1) return;
-
-    var fileUrl = sheet.getRange(row, 7).getValue();
-    if (!fileUrl || typeof fileUrl !== "string") return;
-
-    var match = fileUrl.match(/[-\w]{25,}/);
-    if (!match) return;
-
-    var fileId = match[0];
-    try {
-      var file = DriveApp.getFileById(fileId);
-      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    } catch (eShare) {}
-
-    var directImgUrl = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1000";
-    sheet.setRowHeight(row, 80);
-    try {
-      var cellImage = SpreadsheetApp.newCellImage().setSourceUrl(directImgUrl).build();
-      sheet.getRange(row, 9).setValue(cellImage);
-    } catch (err) {
-      sheet.getRange(row, 9).setFormula('=IMAGE("' + directImgUrl + '", 1)');
-    }
-  } catch (err) {
-    console.error("onFormSubmit error: " + err);
-  }
-}
-
-// Test and verify connection to your dedicated Drive folder
-function authorizeDrive() {
-  var folder = DriveApp.getFolderById(FOLDER_ID);
-  console.log("Connected to Drive folder: " + folder.getName());
+// STEP 1 HELPER: Run this function in the Apps Script editor to authorize Google Drive & test the folder
+function testDriveAccess() {
+  const folder = DriveApp.getFolderById(FOLDER_ID);
+  const file = folder.createFile("test_permission.txt", "Drive access verified!");
+  Logger.log("SUCCESS! Created file: " + file.getUrl());
 }
