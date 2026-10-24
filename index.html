@@ -1604,7 +1604,7 @@
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
-          const maxDim = 1600;
+          const maxDim = 1200;
           let w = img.width;
           let h = img.height;
           if (w > maxDim || h > maxDim) {
@@ -1621,7 +1621,7 @@
           canvas.height = h;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, w, h);
-          filePreviewThumb.src = canvas.toDataURL("image/jpeg", 0.85);
+          filePreviewThumb.src = canvas.toDataURL("image/jpeg", 0.78);
           filePreviewPill.classList.add("active");
         };
         img.src = e.target.result;
@@ -1770,12 +1770,13 @@
             }
           }
 
-          await fetch(CONFIG.appsScriptUrl, {
+          // Asynchronous background dispatch - uploads data/screenshot without freezing the UI
+          fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
-          });
+          }).catch(err => console.warn("Background upload note:", err));
 
         } else {
           // 2. Direct Google Form Submission fallback
@@ -1796,8 +1797,8 @@
           }).catch(err => console.warn("Google Form post fallback:", err));
         }
 
-        // Snappy, realistic responsive transition (300ms)
-        await new Promise(r => setTimeout(r, 300));
+        // Crisp, responsive transition (250ms) for instant feedback
+        await new Promise(r => setTimeout(r, 250));
 
         // Generate Ticket Reference
         const ticketId = "#DUT-" + Math.floor(1000 + Math.random() * 9000);
