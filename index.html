@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DUTRO Help, Feedback & Troubleshooting Portal. Connected directly to live Google Sheets backend.">
+  <meta name="description"
+    content="DUTRO Help, Feedback & Troubleshooting Portal. Connected directly to live Google Sheets backend.">
   <title>DUTRO | Help, Feedback &amp; Troubleshooting Portal</title>
 
   <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <style>
     /* ==========================================================================
@@ -85,7 +88,9 @@
     }
 
     /* Base Reset */
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -197,8 +202,17 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
     }
 
     .icon-button {
@@ -262,6 +276,7 @@
       .top-navbar {
         padding: 0.75rem 1rem;
       }
+
       .user-text-meta,
       .nav-divider {
         display: none;
@@ -332,6 +347,7 @@
       .card-header-main {
         padding: 1.25rem 1.25rem 1rem;
       }
+
       .card-body-content {
         padding: 1.25rem;
       }
@@ -481,18 +497,18 @@
     }
 
     /* Active State */
-    .type-pill-card input[type="radio"]:checked + .type-pill-inner {
+    .type-pill-card input[type="radio"]:checked+.type-pill-inner {
       border-color: var(--accent-blue);
       background-color: var(--accent-blue-subtle);
       box-shadow: 0 0 0 1px var(--accent-blue);
     }
 
-    .type-pill-card input[type="radio"]:checked + .type-pill-inner .type-pill-text {
+    .type-pill-card input[type="radio"]:checked+.type-pill-inner .type-pill-text {
       color: var(--accent-blue);
       font-weight: 700;
     }
 
-    .type-pill-card input[type="radio"]:checked + .type-pill-inner .type-pill-icon-wrap {
+    .type-pill-card input[type="radio"]:checked+.type-pill-inner .type-pill-icon-wrap {
       background-color: var(--accent-blue);
       color: #FFFFFF;
     }
@@ -557,25 +573,33 @@
       border-radius: 50%;
     }
 
-    .urgency-dot.low { background-color: var(--status-green); }
-    .urgency-dot.med { background-color: var(--status-amber); }
-    .urgency-dot.high { background-color: var(--status-red); }
+    .urgency-dot.low {
+      background-color: var(--status-green);
+    }
 
-    .urgency-pill-option input[type="radio"][value="Low"]:checked + .urgency-pill-box {
+    .urgency-dot.med {
+      background-color: var(--status-amber);
+    }
+
+    .urgency-dot.high {
+      background-color: var(--status-red);
+    }
+
+    .urgency-pill-option input[type="radio"][value="Low"]:checked+.urgency-pill-box {
       border-color: var(--status-green);
       background-color: var(--status-green-bg);
       color: #065F46;
       font-weight: 700;
     }
 
-    .urgency-pill-option input[type="radio"][value="Medium"]:checked + .urgency-pill-box {
+    .urgency-pill-option input[type="radio"][value="Medium"]:checked+.urgency-pill-box {
       border-color: var(--status-amber);
       background-color: var(--status-amber-bg);
       color: #92400E;
       font-weight: 700;
     }
 
-    .urgency-pill-option input[type="radio"][value="High / Urgent"]:checked + .urgency-pill-box {
+    .urgency-pill-option input[type="radio"][value="High / Urgent"]:checked+.urgency-pill-box {
       border-color: var(--status-red);
       background-color: var(--status-red-bg);
       color: #991B1B;
@@ -851,7 +875,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .btn-primary-submit.loading .btn-spinner,
@@ -1000,9 +1026,20 @@
       white-space: nowrap;
     }
 
-    .tag-bug { background-color: var(--status-red-bg); color: var(--status-red); }
-    .tag-feature { background-color: var(--accent-blue-subtle); color: var(--accent-blue); }
-    .tag-feedback { background-color: var(--status-amber-bg); color: var(--status-amber); }
+    .tag-bug {
+      background-color: var(--status-red-bg);
+      color: var(--status-red);
+    }
+
+    .tag-feature {
+      background-color: var(--accent-blue-subtle);
+      color: var(--accent-blue);
+    }
+
+    .tag-feedback {
+      background-color: var(--status-amber-bg);
+      color: var(--status-amber);
+    }
 
     .entry-title-text {
       font-weight: 500;
@@ -1065,6 +1102,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- ==========================================================================
@@ -1128,10 +1166,13 @@
                 <div class="type-pill-inner">
                   <div class="type-pill-icon-wrap">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/>
-                      <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/>
-                      <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/>
-                      <path d="M12 20v-9"/><path d="M6 13H2"/><path d="M22 13h-4"/>
+                      <path d="m8 2 1.88 1.88" />
+                      <path d="M14.12 3.88 16 2" />
+                      <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" />
+                      <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" />
+                      <path d="M12 20v-9" />
+                      <path d="M6 13H2" />
+                      <path d="M22 13h-4" />
                     </svg>
                   </div>
                   <span class="type-pill-text">Bug / Technical Issue</span>
@@ -1144,8 +1185,10 @@
                 <div class="type-pill-inner">
                   <div class="type-pill-icon-wrap">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
-                      <path d="M9 18h6"/><path d="M10 22h4"/>
+                      <path
+                        d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+                      <path d="M9 18h6" />
+                      <path d="M10 22h4" />
                     </svg>
                   </div>
                   <span class="type-pill-text">Feature Suggestion</span>
@@ -1158,7 +1201,8 @@
                 <div class="type-pill-inner">
                   <div class="type-pill-icon-wrap">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                      <path
+                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                     </svg>
                   </div>
                   <span class="type-pill-text">General Feedback</span>
@@ -1210,14 +1254,8 @@
               <label class="field-label" for="requestTitleInput">
                 Request Title <span class="required-star">*</span>
               </label>
-              <input 
-                type="text" 
-                id="requestTitleInput" 
-                class="text-input" 
-                placeholder="e.g., Vendor risk score timeout on export" 
-                autocomplete="off"
-                required
-              >
+              <input type="text" id="requestTitleInput" class="text-input"
+                placeholder="e.g., Vendor risk score timeout on export" autocomplete="off" required>
               <span class="validation-msg" id="errTitle">Please enter a brief request title.</span>
             </div>
 
@@ -1253,14 +1291,8 @@
               </label>
               <span class="char-count-text" id="charCounter">0 / 3000</span>
             </div>
-            <textarea 
-              id="descInput" 
-              class="textarea-input" 
-              rows="4" 
-              maxlength="3000"
-              placeholder="Describe what happened, steps to reproduce, or details of your idea..." 
-              required
-            ></textarea>
+            <textarea id="descInput" class="textarea-input" rows="4" maxlength="3000"
+              placeholder="Describe what happened, steps to reproduce, or details of your idea..." required></textarea>
             <span class="validation-msg" id="errDesc">Please describe the issue or suggestion.</span>
           </div>
 
@@ -1278,9 +1310,9 @@
               <div class="dropzone-stack">
                 <div class="dropzone-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
                 </div>
                 <div class="dropzone-main-text">
@@ -1316,14 +1348,8 @@
               </label>
               <span class="field-hint-text">For ticket updates</span>
             </div>
-            <input 
-              type="email" 
-              id="emailInput" 
-              class="text-input" 
-              placeholder="name@company.com" 
-              autocomplete="email"
-              required
-            >
+            <input type="email" id="emailInput" class="text-input" placeholder="name@company.com" autocomplete="email"
+              required>
             <span class="validation-msg" id="errEmail">Please enter a valid work email address.</span>
           </div>
 
@@ -1333,7 +1359,8 @@
               Clear
             </button>
             <button type="submit" class="btn-primary-submit" id="btnSubmit">
-              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
               </svg>
@@ -1355,7 +1382,8 @@
           </div>
           <h2 class="success-main-title">✓ Thank you!</h2>
           <p class="success-desc-text">
-            Your feedback has been received and logged in our system. A record has been posted to our linked Google Spreadsheet and our team has been alerted.
+            Your feedback has been received and logged in our system. A record has been posted to our linked Google
+            Spreadsheet and our team has been alerted.
           </p>
 
           <div class="receipt-box">
@@ -1382,7 +1410,8 @@
           </div>
 
           <button type="button" class="btn-secondary" id="btnSubmitAnother">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 4px;">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
@@ -1406,7 +1435,8 @@
   </main>
 
   <!-- Silent Hidden Iframe Target to Submit without Reload or Redirect -->
-  <iframe name="silentGoogleFormTarget" id="silentGoogleFormTarget" style="display:none;" title="Submission Target"></iframe>
+  <iframe name="silentGoogleFormTarget" id="silentGoogleFormTarget" style="display:none;"
+    title="Submission Target"></iframe>
 
   <!-- Toast Notification Host -->
   <div class="toast-host" id="toastHost"></div>
@@ -1436,11 +1466,11 @@
       googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/formResponse",
       entries: {
         requestType: "entry.252022971",    // Bug / Technical Issue | Feature Suggestion | General Feedback
-        urgency:     "entry.887476383",    // Low | Medium | High / Urgent
-        title:       "entry.420845531",    // Request Title
-        category:    "entry.2108787057",   // Risk Landscape & Reports | Trust & Compliance | Discovery & RoPA | UI & Usability | Other
+        urgency: "entry.887476383",    // Low | Medium | High / Urgent
+        title: "entry.420845531",    // Request Title
+        category: "entry.2108787057",   // Risk Landscape & Reports | Trust & Compliance | Discovery & RoPA | UI & Usability | Other
         description: "entry.520592394",    // Description (Paragraph)
-        email:       "entry.741137872"     // Contact Email
+        email: "entry.741137872"     // Contact Email
       }
     };
 
@@ -1845,4 +1875,5 @@
     });
   </script>
 </body>
+
 </html>
