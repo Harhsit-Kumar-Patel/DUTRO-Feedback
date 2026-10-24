@@ -1,3 +1,6 @@
+// Configuration
+var FOLDER_ID = "1gfMxEJbB_9VBIE7_X-qXmZG037dNTkLbTXURsgr60sdBGWwoAtEEnHCNcEg5rOenuU_OHuB9";
+
 function doPost(e) {
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -6,14 +9,15 @@ function doPost(e) {
     var fileUrl = "N/A";
     var directImgUrl = "";
 
-    // 1. If screenshot is attached, save to Google Drive & generate viewable thumbnail
+    // 1. If screenshot is attached, save to your dedicated Google Drive folder
     if (data.fileData) {
       try {
+        var folder = DriveApp.getFolderById(FOLDER_ID);
         var contentType = data.fileType || "image/jpeg";
         var fileName = data.fileName || "screenshot.jpg";
         var decoded = Utilities.base64Decode(data.fileData);
         var blob = Utilities.newBlob(decoded, contentType, fileName);
-        var file = DriveApp.createFile(blob);
+        var file = folder.createFile(blob);
         
         // Ensure file is viewable with link
         try {
@@ -101,7 +105,8 @@ function onFormSubmit(e) {
   }
 }
 
-// Run this once inside Apps Script to grant Drive write permissions
+// Test and verify connection to your dedicated Drive folder
 function authorizeDrive() {
-  DriveApp.getRootFolder();
+  var folder = DriveApp.getFolderById(FOLDER_ID);
+  console.log("Connected to Drive folder: " + folder.getName());
 }
