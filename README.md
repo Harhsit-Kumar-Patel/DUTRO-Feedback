@@ -37,7 +37,7 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 - **Live Spreadsheet**: [DUTRO Feedbacks (Responses)](https://docs.google.com/spreadsheets/d/1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ/edit?gid=1229421619)
 - **Google Apps Script Webhook Endpoint**:
   ```text
-  https://script.google.com/macros/s/AKfycbzktTCupcvhBergOxKg07OqhJg4JEZX-7eJ4PwaJJdJTRRpAEwWLrX7MaZ950HS82CZ/exec
+  https://script.google.com/macros/s/AKfycbx01XLd4B78f7WSmhKZ5lsk1BJdwoEt9oH5x9bwbaSTLXR2UlqUwvvtpiiStYe53Xp2/exec
   ```
 
 ---
