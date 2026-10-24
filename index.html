@@ -1430,7 +1430,7 @@
      */
     const CONFIG = {
       // Option 1: Paste Google Apps Script Web App URL here to write directly to Sheets:
-      appsScriptUrl: "https://script.google.com/macros/s/AKfycbx01XLd4B78f7WSmhKZ5lsk1BJdwoEt9oH5x9bwbaSTLXR2UlqUwvvtpiiStYe53Xp2/exec",
+      appsScriptUrl: "https://script.google.com/macros/s/AKfycbzLm7aRCVJqrUI5Vau5-bYJJ0OhkNN2jbxcQu7Ff1RX7MkxVrWyVsQp4FJ6NGP9gh4/exec",
 
       // Option 2: Direct Google Form Action URL:
       googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/formResponse",
@@ -1729,6 +1729,7 @@
           await fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
+            credentials: "include",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
           });
