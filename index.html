@@ -1494,7 +1494,7 @@
      */
     const CONFIG = {
       // Option 1: Paste Google Apps Script Web App URL here to write directly to Sheets:
-      appsScriptUrl: "https://script.google.com/macros/s/AKfycbw0U_EFYg1wvSK8RlJvL6NvFcFBRC20BYEMycHgF-SyPu8E7PjkcYu4qtyuBx6Xubqx/exec",
+      appsScriptUrl: "https://script.google.com/macros/s/AKfycbxdJRwQdpLaDna3hf4FJ7V72JsYK1HrehpUMIaBNctEqHvTCB7kxkKaLv-iSkCwodsL/exec",
 
       // Option 2: Direct Google Form Action URL:
       googleFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/formResponse",
@@ -1843,13 +1843,13 @@
             }))
           };
 
-          // Asynchronous background dispatch - uploads data/screenshots without freezing the UI
-          fetch(CONFIG.appsScriptUrl, {
+          // Await fetch so large screenshot payloads complete transmission before UI transition
+          await fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
-          }).catch(err => console.warn("Background upload note:", err));
+          });
 
         } else {
           // Fallback to direct Form POST
