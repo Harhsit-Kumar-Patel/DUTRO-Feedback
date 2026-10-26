@@ -81,10 +81,8 @@ function doPost(e) {
       previewFormula                  // J: Screenshot Preview (first image)
     ]);
 
-    // Set row height so the thumbnail is clearly visible
-    if (primaryFileId) {
-      sheet.setRowHeight(nextRow, 80);
-    }
+    // Set row height to 100 so thumbnails and text fit cleanly
+    sheet.setRowHeight(nextRow, 100);
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
