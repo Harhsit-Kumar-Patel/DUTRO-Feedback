@@ -8,61 +8,88 @@ function doPost(e) {
 
   try {
     const data = JSON.parse(e.postData.contents);
-    let fileUrl = "N/A";
-    let fileId = "";
+    const uploadedUrls = [];
+    const uploadedIds = [];
 
-    // 1. Process and save the screenshot if provided
-    if (data.fileData && data.fileName) {
+    // 1. Collect files to process (supports up to 10 screenshots)
+    const filesToProcess = [];
+    if (Array.isArray(data.files) && data.files.length > 0) {
+      filesToProcess.push(...data.files.slice(0, 10)); // Maximum 10 screenshots
+    } else if (data.fileData && data.fileName) {
+      // Fallback for single-file payloads
+      filesToProcess.push({
+        fileData: data.fileData,
+        fileName: data.fileName,
+        mimeType: data.mimeType || "image/png"
+      });
+    }
+
+    // 2. Process and save each screenshot to Google Drive
+    if (filesToProcess.length > 0) {
       try {
         const folder = DriveApp.getFolderById(FOLDER_ID);
-        const decodedBytes = Utilities.base64Decode(data.fileData);
-        const blob = Utilities.newBlob(decodedBytes, data.mimeType || "image/png", data.fileName);
-        const file = folder.createFile(blob);
+        for (let i = 0; i < filesToProcess.length; i++) {
+          const item = filesToProcess[i];
+          if (!item.fileData) continue;
+          try {
+            const decodedBytes = Utilities.base64Decode(item.fileData);
+            const blob = Utilities.newBlob(decodedBytes, item.mimeType || "image/png", item.fileName || ("screenshot_" + (i + 1) + ".png"));
+            const file = folder.createFile(blob);
 
-        // Make the file viewable with link
-        try {
-          file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-        } catch (shareErr) {
-          console.warn("Share warning: " + shareErr);
+            // Make file accessible with link
+            try {
+              file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+            } catch (shareErr) {
+              console.warn("Share warning: " + shareErr);
+            }
+
+            uploadedUrls.push(file.getUrl());
+            uploadedIds.push(file.getId());
+          } catch (fileErr) {
+            console.error("Error creating file " + (i + 1) + ": " + fileErr);
+          }
         }
-
-        fileUrl = file.getUrl();
-        fileId = file.getId();
       } catch (driveErr) {
-        console.error("Drive upload error: " + driveErr);
+        console.error("Drive folder error: " + driveErr);
       }
     }
 
-    // 2. Locate sheet (works for both container-bound and standalone scripts)
+    const fileUrl = uploadedUrls.length > 0 ? uploadedUrls.join(", ") : "N/A";
+    const primaryFileId = uploadedIds.length > 0 ? uploadedIds[0] : "";
+
+    // 3. Locate sheet (works for both container-bound and standalone scripts)
     const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
     const nextRow = sheet.getLastRow() + 1;
 
-    // 3. Prepare preview formula for Column I
-    const previewFormula = fileId 
-      ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000", 1)` 
+    // 4. Prepare preview formula for first image (Column J)
+    const previewFormula = primaryFileId 
+      ? `=IFERROR(IMAGE("https://drive.google.com/thumbnail?id=${primaryFileId}&sz=w1000", 1), "")` 
       : "";
 
-    // 4. Append row matching Columns A through I
+    // 5. Append row matching new Columns A through J
     sheet.appendRow([
-      new Date(),              // A: Timestamp
-      data.requestType || "",  // B: Request Type
-      data.urgency || "",      // C: Urgency Level
-      data.title || "",        // D: Request Title
-      data.category || "",     // E: Category / Module
-      data.description || "",  // F: Description
-      fileUrl,                 // G: Upload a Screenshot
-      data.email || "",        // H: Contact Email
-      previewFormula           // I: Screenshot Preview
+      new Date(),                     // A: Timestamp
+      data.consultantName || "",      // B: Consultant Name
+      data.companyName || "",         // C: Company Name
+      data.requestType || "",         // D: Request Type
+      data.urgency || "",             // E: Urgency Level
+      data.title || "",               // F: Request Title
+      data.category || "",            // G: Category / Module
+      data.description || "",         // H: Description
+      fileUrl,                        // I: Upload a Screenshot (comma-separated URLs)
+      previewFormula                  // J: Screenshot Preview (first image)
     ]);
 
     // Set row height so the thumbnail is clearly visible
-    if (fileId) {
+    if (primaryFileId) {
       sheet.setRowHeight(nextRow, 80);
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
+      count: uploadedUrls.length,
+      fileUrls: uploadedUrls,
       fileUrl: fileUrl
     })).setMimeType(ContentService.MimeType.JSON);
 
@@ -77,9 +104,10 @@ function doPost(e) {
   }
 }
 
-// STEP 1 HELPER: Run this function in the Apps Script editor to authorize Google Drive & test the folder
+// STEP 1 HELPER: Run this function in the Apps Script editor to authorize Google Drive & test folder permissions
 function testDriveAccess() {
   const folder = DriveApp.getFolderById(FOLDER_ID);
   const file = folder.createFile("test_permission.txt", "Drive access verified!");
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   Logger.log("SUCCESS! Created file: " + file.getUrl());
 }

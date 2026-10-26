@@ -14,18 +14,19 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
   - Theme Switcher (🌙 Dark Mode / ☀️ Light Mode)
 - **Feedback & Troubleshooting Card**:
   - Focused, centered enterprise card layout (`max-width: 780px`)
-  - **7 Pure Feedback Fields**:
-    1. **Request Type \***: 3-option pill toggle (`Bug / Technical Issue`, `Feature Suggestion`, `General Feedback`)
-    2. **Urgency Level \***: Dynamic slider (`Low`, `Medium`, `High / Urgent` - revealed when Bug is selected)
-    3. **Request Title \***: Short text input
-    4. **Category / Module \***: Dropdown (`Risk Landscape & Reports`, `Trust & Compliance`, `Discovery & RoPA`, `UI & Usability`, `Other`)
-    5. **Description \***: Paragraph textarea with live character counter (`0 / 3000`)
-    6. **Upload a Screenshot \***: Drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) with canvas compression
-    7. **Contact Email \***: Work email input with validation
+  - **8 Pure Feedback Fields**:
+    1. **Consultant Name \***: Short text input
+    2. **Company Name \***: Short text input
+    3. **Request Type \***: 3-option pill toggle (`Bug / Technical Issue`, `Feature Suggestion`, `General Feedback`)
+    4. **Urgency Level \***: Dynamic selector (`Low`, `Medium`, `High / Urgent` - revealed when Bug is selected)
+    5. **Request Title \***: Short text input
+    6. **Category / Module \***: Dropdown with 14 module options (Company Profile, Global Framework, Dashboard, Data Lineage, Workspace, Discovery, Vendors, Evidence Bank, Gap Analysis, Reports, Compliance Log, Regulatory Intelligence, Cookie Consent, Universal Consent)
+    7. **Description \***: Paragraph textarea with live character counter (`0 / 3000`)
+    8. **Upload a Screenshot \***: Multi-file drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) for **up to 10 screenshots** with individual remove controls and auto-compression
   - Action buttons: `Clear` and `Submit Feedback` (with instant non-blocking background dispatch)
 - **In-Page Confirmation State**:
   - Reference ticket code generation (e.g. `#DUT-6191`)
-  - Full receipt summary
+  - Full receipt summary with Consultant Name, Company Name, and attached screenshot count
   - `Submit Another Request` action
 - **Session Submissions Feed**:
   - Real-time logging of submissions completed during the user's active session
@@ -42,23 +43,20 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 
 ---
 
-## 🔗 Live Google Form Field & Entry Mapping
+## 🔗 Field & Column Mapping (Columns A through J)
 
-- **Connected Form**: `DUTRO Feedbacks`
-- **Submission Action Endpoint**:
-  ```text
-  https://docs.google.com/forms/d/e/1FAIpQLSdMsHMk7VrC9x3g69zycRfnc_-C_tbXM0DDMDK2qvsZ1jk4JQ/formResponse
-  ```
-
-| Field on Portal | Question on Google Form | Form Entry ID |
-| :--- | :--- | :--- |
-| **Request Type** | `Request Type *` | `entry.252022971` |
-| **Urgency Level** | `Urgency Level *` | `entry.887476383` |
-| **Request Title** | `Request Title *` | `entry.420845531` |
-| **Category / Module** | `Category / Module *` | `entry.2108787057` |
-| **Description** | `Description *` | `entry.520592394` |
-| **Upload a Screenshot** | `Upload a Screenshot *` | Custom Dropzone / Paste Uploader |
-| **Contact Email** | `Contact Email *` | `entry.741137872` |
+| Column | Header on Sheet | Field on Portal | Format |
+| :--- | :--- | :--- | :--- |
+| **A** | `Timestamp` | Generated dynamically | Datetime |
+| **B** | `Consultant Name` | `Consultant Name *` | Text |
+| **C** | `Company Name` | `Company Name *` | Text |
+| **D** | `Request Type` | `Request Type *` | Multiple choice |
+| **E** | `Urgency Level` | `Urgency Level *` | Multiple choice (or N/A) |
+| **F** | `Request Title` | `Request Title *` | Text |
+| **G** | `Category / Module` | `Category / Module *` | 14 Module Dropdown |
+| **H** | `Description` | `Description *` | Paragraph text |
+| **I** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 10) |
+| **J** | `Screenshot Preview` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
 
 ---
 

@@ -677,7 +677,7 @@
       text-align: right;
     }
 
-    /* 4. Upload a Screenshot Dropzone */
+    /* 4. Upload a Screenshot Dropzone & Multi-file Preview */
     .dropzone-container {
       border: 1.5px dashed var(--border-color);
       border-radius: var(--radius-md);
@@ -721,20 +721,39 @@
       color: var(--text-subtle);
     }
 
-    .file-preview-pill {
+    .files-counter-badge {
       display: none;
-      margin-top: 0.6rem;
-      padding: 0.65rem 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      background-color: var(--accent-blue-subtle);
+      border-radius: var(--radius-full);
+      padding: 0.2rem 0.65rem;
+      align-self: flex-start;
+      margin-top: 0.5rem;
+    }
+
+    .files-preview-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+
+    .file-preview-item {
+      display: flex;
+      padding: 0.55rem 0.75rem;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
       background-color: var(--bg-card);
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
+      transition: var(--transition-fast);
     }
 
-    .file-preview-pill.active {
-      display: flex;
+    .file-preview-item:hover {
+      border-color: var(--border-focus);
     }
 
     .preview-left-group {
@@ -745,11 +764,12 @@
     }
 
     .preview-thumbnail {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 4px;
       object-fit: cover;
       border: 1px solid var(--border-color);
+      flex-shrink: 0;
     }
 
     .preview-info {
@@ -773,7 +793,7 @@
       color: var(--text-subtle);
     }
 
-    .btn-remove-preview {
+    .btn-remove-file {
       background: none;
       border: none;
       color: var(--text-subtle);
@@ -783,9 +803,11 @@
       transition: var(--transition-fast);
       display: flex;
       align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    .btn-remove-preview:hover {
+    .btn-remove-file:hover {
       color: var(--status-red);
       background-color: var(--status-red-bg);
     }
@@ -1150,7 +1172,28 @@
         <!-- The Feedback Form -->
         <form id="feedbackForm" class="feedback-form" novalidate>
 
-          <!-- 1. Request Type (Required, 3 Pills) -->
+          <!-- 1. Consultant Name & Company Name (2-Column Grid) -->
+          <div class="form-row-2col">
+            <div class="form-group-item" id="groupConsultant">
+              <label class="field-label" for="consultantInput">
+                Consultant Name <span class="required-star">*</span>
+              </label>
+              <input type="text" id="consultantInput" class="text-input"
+                placeholder="e.g. Alex Morgan" autocomplete="name" required>
+              <span class="validation-msg" id="errConsultant">Please enter your consultant name.</span>
+            </div>
+
+            <div class="form-group-item" id="groupCompany">
+              <label class="field-label" for="companyInput">
+                Company Name <span class="required-star">*</span>
+              </label>
+              <input type="text" id="companyInput" class="text-input"
+                placeholder="e.g. Acme Corporation" autocomplete="organization" required>
+              <span class="validation-msg" id="errCompany">Please enter company name.</span>
+            </div>
+          </div>
+
+          <!-- 2. Request Type (Required, 3 Pills) -->
           <div class="form-group-item" id="groupType">
             <div class="field-row-header">
               <label class="field-label">
@@ -1211,7 +1254,7 @@
             </div>
           </div>
 
-          <!-- 2. Urgency Level (Shown when Bug / Technical Issue is selected) -->
+          <!-- 3. Urgency Level (Shown when Bug / Technical Issue is selected) -->
           <div class="urgency-slider-box visible" id="urgencySliderBox">
             <div class="field-row-header">
               <label class="field-label" style="font-size: 0.8rem;">
@@ -1247,7 +1290,7 @@
             </div>
           </div>
 
-          <!-- 3. Request Title & Category (2-Column Grid) -->
+          <!-- 4. Request Title & Category (2-Column Grid) -->
           <div class="form-row-2col">
             <!-- Request Title -->
             <div class="form-group-item" id="groupTitle">
@@ -1259,7 +1302,7 @@
               <span class="validation-msg" id="errTitle">Please enter a brief request title.</span>
             </div>
 
-            <!-- Category / Module (Exact Google Form Dropdown Options) -->
+            <!-- Category / Module (Exact 14 Google Form Dropdown Options) -->
             <div class="form-group-item" id="groupCategory">
               <label class="field-label" for="categorySelect">
                 Category / Module <span class="required-star">*</span>
@@ -1267,11 +1310,20 @@
               <div class="select-wrapper">
                 <select id="categorySelect" class="select-input" required>
                   <option value="" disabled selected>Choose module...</option>
-                  <option value="Risk Landscape & Reports">Risk Landscape &amp; Reports</option>
-                  <option value="Trust & Compliance">Trust &amp; Compliance</option>
-                  <option value="Discovery & RoPA">Discovery &amp; RoPA</option>
-                  <option value="UI & Usability">UI &amp; Usability</option>
-                  <option value="Other">Other</option>
+                  <option value="Company Profile">1. Company Profile</option>
+                  <option value="Global Framework">2. Global Framework</option>
+                  <option value="Dashboard">3. Dashboard</option>
+                  <option value="Data Lineage">4. Data Lineage</option>
+                  <option value="Workspace">5. Workspace</option>
+                  <option value="Discovery">6. Discovery</option>
+                  <option value="Vendors">7. Vendors</option>
+                  <option value="Evidence Bank">8. Evidence Bank</option>
+                  <option value="Gap Analysis">9. Gap Analysis</option>
+                  <option value="Reports">10. Reports</option>
+                  <option value="Compliance Log">11. Compliance Log</option>
+                  <option value="Regulatory Intelligence">12. Regulatory Intelligence</option>
+                  <option value="Cookie Consent">13. Cookie Consent</option>
+                  <option value="Universal Consent">14. Universal Consent</option>
                 </select>
                 <div class="select-arrow-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1283,7 +1335,7 @@
             </div>
           </div>
 
-          <!-- 4. Description (Required, Paragraph) -->
+          <!-- 5. Description (Required, Paragraph) -->
           <div class="form-group-item" id="groupDesc">
             <div class="field-row-header">
               <label class="field-label" for="descInput">
@@ -1296,17 +1348,17 @@
             <span class="validation-msg" id="errDesc">Please describe the issue or suggestion.</span>
           </div>
 
-          <!-- 5. Upload a Screenshot (Dropzone + Clipboard Paste + File Select) -->
+          <!-- 6. Upload a Screenshot (Dropzone + Clipboard Paste + File Select up to 10) -->
           <div class="form-group-item" id="groupScreenshot">
             <div class="field-row-header">
               <label class="field-label">
                 Upload a Screenshot <span class="required-star">*</span>
               </label>
-              <span class="field-hint-text">Max 10 MB (PNG, JPG, WebP)</span>
+              <span class="field-hint-text">Up to 10 screenshots (PNG, JPG, WebP)</span>
             </div>
 
             <div class="dropzone-container" id="dropzoneContainer">
-              <input type="file" id="screenshotFileInput" accept="image/*" style="display:none;">
+              <input type="file" id="screenshotFileInput" accept="image/*" multiple style="display:none;">
               <div class="dropzone-stack">
                 <div class="dropzone-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1316,41 +1368,15 @@
                   </svg>
                 </div>
                 <div class="dropzone-main-text">
-                  Drag &amp; drop screenshot here, <span>browse file</span>, or paste (Ctrl/Cmd+V)
+                  Drag &amp; drop screenshots here (up to 10), <span>browse files</span>, or paste (Ctrl/Cmd+V)
                 </div>
-                <div class="dropzone-sub-text">Attaching a visual screenshot speeds up issue diagnosis</div>
+                <div class="dropzone-sub-text">Attaching visual screenshots speeds up issue diagnosis</div>
               </div>
             </div>
 
-            <!-- Attached File Preview Pill -->
-            <div class="file-preview-pill" id="filePreviewPill">
-              <div class="preview-left-group">
-                <img id="filePreviewThumb" class="preview-thumbnail" src="" alt="Thumbnail">
-                <div class="preview-info">
-                  <span class="preview-name" id="previewFileName">screenshot.png</span>
-                  <span class="preview-size" id="previewFileSize">0 KB</span>
-                </div>
-              </div>
-              <button type="button" class="btn-remove-preview" id="btnRemovePreview" title="Remove attachment">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- 6. Contact Email (Required) -->
-          <div class="form-group-item" id="groupEmail">
-            <div class="field-row-header">
-              <label class="field-label" for="emailInput">
-                Contact Email <span class="required-star">*</span>
-              </label>
-              <span class="field-hint-text">For ticket updates</span>
-            </div>
-            <input type="email" id="emailInput" class="text-input" placeholder="name@company.com" autocomplete="email"
-              required>
-            <span class="validation-msg" id="errEmail">Please enter a valid work email address.</span>
+            <!-- Multi-file Counter & Preview List -->
+            <div class="files-counter-badge" id="filesCounterBadge">0 / 10 screenshots attached</div>
+            <div class="files-preview-list" id="filesPreviewList"></div>
           </div>
 
           <!-- Form Buttons -->
@@ -1392,20 +1418,28 @@
               <span class="receipt-value" id="receiptRefId">#DUT-8429</span>
             </div>
             <div class="receipt-item-row">
+              <span class="receipt-label">Consultant</span>
+              <span class="receipt-value" id="receiptConsultant">—</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-label">Company</span>
+              <span class="receipt-value" id="receiptCompany">—</span>
+            </div>
+            <div class="receipt-item-row">
               <span class="receipt-label">Request Type</span>
               <span class="receipt-value" id="receiptType">Bug / Technical Issue</span>
             </div>
             <div class="receipt-item-row">
               <span class="receipt-label">Category</span>
-              <span class="receipt-value" id="receiptCat">Risk Landscape &amp; Reports</span>
+              <span class="receipt-value" id="receiptCat">Dashboard</span>
             </div>
             <div class="receipt-item-row">
               <span class="receipt-label">Urgency</span>
               <span class="receipt-value" id="receiptUrg">Medium</span>
             </div>
             <div class="receipt-item-row">
-              <span class="receipt-label">Contact Email</span>
-              <span class="receipt-value" id="receiptMail">—</span>
+              <span class="receipt-label">Screenshots</span>
+              <span class="receipt-value" id="receiptScreenshots">0 attached</span>
             </div>
           </div>
 
@@ -1478,24 +1512,23 @@
     const form = document.getElementById("feedbackForm");
     const urgencySliderBox = document.getElementById("urgencySliderBox");
     const requestTypeInputs = document.querySelectorAll('input[name="requestType"]');
+    const consultantInput = document.getElementById("consultantInput");
+    const companyInput = document.getElementById("companyInput");
     const titleInput = document.getElementById("requestTitleInput");
     const categorySelect = document.getElementById("categorySelect");
     const descInput = document.getElementById("descInput");
-    const emailInput = document.getElementById("emailInput");
     const charCounter = document.getElementById("charCounter");
     const btnSubmit = document.getElementById("btnSubmit");
     const btnReset = document.getElementById("btnReset");
     const successView = document.getElementById("successView");
     const btnSubmitAnother = document.getElementById("btnSubmitAnother");
 
-    // Screenshot Uploader
+    // Screenshot Uploader (Up to 10 screenshots)
     const dropzoneContainer = document.getElementById("dropzoneContainer");
     const screenshotFileInput = document.getElementById("screenshotFileInput");
-    const filePreviewPill = document.getElementById("filePreviewPill");
-    const filePreviewThumb = document.getElementById("filePreviewThumb");
-    const previewFileName = document.getElementById("previewFileName");
-    const previewFileSize = document.getElementById("previewFileSize");
-    const btnRemovePreview = document.getElementById("btnRemovePreview");
+    const filesPreviewList = document.getElementById("filesPreviewList");
+    const filesCounterBadge = document.getElementById("filesCounterBadge");
+    let attachedFiles = []; // Array of { name, size, mimeType, base64, dataUrl }
 
     // Theme Switch
     const themeSwitchBtn = document.getElementById("themeSwitchBtn");
@@ -1541,9 +1574,109 @@
     });
 
     /* -------------------------------------------------------------------------
-       Screenshot Upload (Dropzone + File Input + Clipboard Paste)
+       Multi-Screenshot Handling (Up to 10 Screenshots)
        ------------------------------------------------------------------------- */
-    let attachedFile = null;
+    function updateFilesUI() {
+      filesPreviewList.innerHTML = "";
+      if (attachedFiles.length > 0) {
+        filesCounterBadge.style.display = "inline-block";
+        filesCounterBadge.textContent = `${attachedFiles.length} / 10 screenshots attached`;
+      } else {
+        filesCounterBadge.style.display = "none";
+      }
+
+      attachedFiles.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "file-preview-item";
+        row.innerHTML = `
+          <div class="preview-left-group">
+            <img class="preview-thumbnail" src="${item.dataUrl}" alt="Thumbnail">
+            <div class="preview-info">
+              <span class="preview-name" title="${item.name}">${item.name}</span>
+              <span class="preview-size">${(item.size / 1024).toFixed(1)} KB</span>
+            </div>
+          </div>
+          <button type="button" class="btn-remove-file" title="Remove screenshot">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        `;
+
+        row.querySelector(".btn-remove-file").addEventListener("click", (e) => {
+          e.stopPropagation();
+          attachedFiles.splice(index, 1);
+          updateFilesUI();
+        });
+
+        filesPreviewList.appendChild(row);
+      });
+    }
+
+    async function processUploadedFiles(fileList) {
+      const remainingSlots = 10 - attachedFiles.length;
+      if (remainingSlots <= 0) {
+        showToast("Maximum 10 screenshots allowed.", "error");
+        return;
+      }
+
+      const filesToAdd = Array.from(fileList).slice(0, remainingSlots);
+      if (fileList.length > remainingSlots) {
+        showToast(`Only ${remainingSlots} more screenshot(s) could be added (max 10).`, "info");
+      }
+
+      for (const file of filesToAdd) {
+        if (!file.type.startsWith("image/")) {
+          showToast(`Skipped non-image file: ${file.name}`, "error");
+          continue;
+        }
+        if (file.size > 15 * 1024 * 1024) {
+          showToast(`File ${file.name} exceeds 15 MB limit`, "error");
+          continue;
+        }
+
+        const dataUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const maxDim = 1200;
+              let w = img.width;
+              let h = img.height;
+              if (w > maxDim || h > maxDim) {
+                if (w > h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
+              }
+              const canvas = document.createElement("canvas");
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, w, h);
+              resolve(canvas.toDataURL("image/jpeg", 0.78));
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+
+        const base64 = dataUrl.split(",")[1];
+        attachedFiles.push({
+          name: file.name || `screenshot_${attachedFiles.length + 1}.jpg`,
+          size: file.size,
+          mimeType: "image/jpeg",
+          dataUrl,
+          base64
+        });
+      }
+
+      updateFilesUI();
+    }
 
     dropzoneContainer.addEventListener("click", () => screenshotFileInput.click());
 
@@ -1559,14 +1692,15 @@
     dropzoneContainer.addEventListener("drop", (e) => {
       e.preventDefault();
       dropzoneContainer.classList.remove("dragover");
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        processUploadedFile(e.dataTransfer.files[0]);
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        processUploadedFiles(e.dataTransfer.files);
       }
     });
 
     screenshotFileInput.addEventListener("change", (e) => {
-      if (e.target.files && e.target.files[0]) {
-        processUploadedFile(e.target.files[0]);
+      if (e.target.files && e.target.files.length > 0) {
+        processUploadedFiles(e.target.files);
+        screenshotFileInput.value = "";
       }
     });
 
@@ -1574,67 +1708,17 @@
     document.addEventListener("paste", (e) => {
       const items = e.clipboardData?.items;
       if (!items) return;
+      const imageFiles = [];
       for (const item of items) {
         if (item.type.indexOf("image") !== -1) {
           const file = item.getAsFile();
-          if (file) {
-            processUploadedFile(file);
-            showToast("Screenshot pasted from clipboard", "success");
-            break;
-          }
+          if (file) imageFiles.push(file);
         }
       }
-    });
-
-    function processUploadedFile(file) {
-      if (!file.type.startsWith("image/")) {
-        showToast("Please upload an image file (PNG, JPG, WebP)", "error");
-        return;
+      if (imageFiles.length > 0) {
+        processUploadedFiles(imageFiles);
+        showToast("Screenshot pasted from clipboard", "success");
       }
-      if (file.size > 15 * 1024 * 1024) {
-        showToast("File size exceeds 15 MB limit", "error");
-        return;
-      }
-
-      attachedFile = file;
-      previewFileName.textContent = file.name || "pasted-screenshot.png";
-      previewFileSize.textContent = (file.size / 1024).toFixed(1) + " KB";
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 1200;
-          let w = img.width;
-          let h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) {
-              h = Math.round((h * maxDim) / w);
-              w = maxDim;
-            } else {
-              w = Math.round((w * maxDim) / h);
-              h = maxDim;
-            }
-          }
-          const canvas = document.createElement("canvas");
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, w, h);
-          filePreviewThumb.src = canvas.toDataURL("image/jpeg", 0.78);
-          filePreviewPill.classList.add("active");
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    btnRemovePreview.addEventListener("click", (e) => {
-      e.stopPropagation();
-      attachedFile = null;
-      screenshotFileInput.value = "";
-      filePreviewPill.classList.remove("active");
-      filePreviewThumb.src = "";
     });
 
     /* -------------------------------------------------------------------------
@@ -1644,14 +1728,22 @@
       document.querySelectorAll(".form-group-item").forEach(el => el.classList.remove("has-error"));
     }
 
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
-    }
-
     function validate() {
       clearErrors();
       let isValid = true;
       let firstError = null;
+
+      if (!consultantInput.value.trim()) {
+        document.getElementById("groupConsultant").classList.add("has-error");
+        if (!firstError) firstError = consultantInput;
+        isValid = false;
+      }
+
+      if (!companyInput.value.trim()) {
+        document.getElementById("groupCompany").classList.add("has-error");
+        if (!firstError) firstError = companyInput;
+        isValid = false;
+      }
 
       if (!titleInput.value.trim()) {
         document.getElementById("groupTitle").classList.add("has-error");
@@ -1671,17 +1763,11 @@
         isValid = false;
       }
 
-      if (!isValidEmail(emailInput.value)) {
-        document.getElementById("groupEmail").classList.add("has-error");
-        if (!firstError) firstError = emailInput;
-        isValid = false;
-      }
-
       if (firstError) firstError.focus();
       return isValid;
     }
 
-    [titleInput, categorySelect, descInput, emailInput].forEach(field => {
+    [consultantInput, companyInput, titleInput, categorySelect, descInput].forEach(field => {
       field.addEventListener("input", () => field.closest(".form-group-item")?.classList.remove("has-error"));
       field.addEventListener("change", () => field.closest(".form-group-item")?.classList.remove("has-error"));
     });
@@ -1715,7 +1801,7 @@
     }
 
     /* -------------------------------------------------------------------------
-       Form Submission via JavaScript to Google Form Endpoint
+       Form Submission via JavaScript to Apps Script Webhook Endpoint
        ------------------------------------------------------------------------- */
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1725,6 +1811,8 @@
         return;
       }
 
+      const consultantName = consultantInput.value.trim();
+      const companyName = companyInput.value.trim();
       const requestType = document.querySelector('input[name="requestType"]:checked')?.value || "General Feedback";
       const urgency = requestType === "Bug / Technical Issue"
         ? (document.querySelector('input[name="urgencyLevel"]:checked')?.value || "Medium")
@@ -1732,45 +1820,30 @@
       const title = titleInput.value.trim();
       const category = categorySelect.value;
       const description = descInput.value.trim();
-      const email = emailInput.value.trim();
 
       btnSubmit.classList.add("loading");
       btnSubmit.disabled = true;
 
       try {
         if (CONFIG.appsScriptUrl) {
-          // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload)
+          // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload up to 10)
           const payload = {
+            consultantName,
+            companyName,
             requestType,
             urgency,
             title,
             category,
             description,
-            email,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            files: attachedFiles.map(f => ({
+              fileName: f.name,
+              mimeType: f.mimeType,
+              fileData: f.base64
+            }))
           };
 
-          if (attachedFile) {
-            payload.fileName = attachedFile.name || "screenshot.jpg";
-            payload.fileType = attachedFile.type || "image/jpeg";
-            payload.mimeType = attachedFile.type || "image/jpeg";
-
-            if (filePreviewThumb.src && filePreviewThumb.src.startsWith("data:")) {
-              payload.fileData = filePreviewThumb.src.split(",")[1];
-            } else {
-              payload.fileData = await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                  const base64 = reader.result ? reader.result.split(",")[1] : "";
-                  resolve(base64);
-                };
-                reader.onerror = () => resolve("");
-                reader.readAsDataURL(attachedFile);
-              });
-            }
-          }
-
-          // Asynchronous background dispatch - uploads data/screenshot without freezing the UI
+          // Asynchronous background dispatch - uploads data/screenshots without freezing the UI
           fetch(CONFIG.appsScriptUrl, {
             method: "POST",
             mode: "no-cors",
@@ -1779,14 +1852,13 @@
           }).catch(err => console.warn("Background upload note:", err));
 
         } else {
-          // 2. Direct Google Form Submission fallback
+          // Fallback to direct Form POST
           const postData = new URLSearchParams();
           postData.append(CONFIG.entries.requestType, requestType);
           postData.append(CONFIG.entries.urgency, urgency);
           postData.append(CONFIG.entries.title, title);
           postData.append(CONFIG.entries.category, category);
           postData.append(CONFIG.entries.description, description);
-          postData.append(CONFIG.entries.email, email);
 
           fetch(CONFIG.googleFormUrl, {
             method: "POST",
@@ -1805,10 +1877,12 @@
 
         // Populate Receipt
         document.getElementById("receiptRefId").textContent = ticketId;
+        document.getElementById("receiptConsultant").textContent = consultantName;
+        document.getElementById("receiptCompany").textContent = companyName;
         document.getElementById("receiptType").textContent = requestType;
         document.getElementById("receiptCat").textContent = category;
         document.getElementById("receiptUrg").textContent = urgency;
-        document.getElementById("receiptMail").textContent = email;
+        document.getElementById("receiptScreenshots").textContent = `${attachedFiles.length} attached`;
 
         // Add to Session History
         loggedSubmissionsCount++;
@@ -1833,8 +1907,8 @@
         // Reset Inputs
         form.reset();
         charCounter.textContent = "0 / 3000";
-        emailInput.value = "";
-        btnRemovePreview.click();
+        attachedFiles = [];
+        updateFilesUI();
         syncUrgency();
 
         // Show Success Confirmation View
@@ -1859,7 +1933,7 @@
       successView.style.display = "none";
       form.style.display = "flex";
       clearErrors();
-      titleInput.focus();
+      consultantInput.focus();
     });
 
     /* -------------------------------------------------------------------------
@@ -1867,11 +1941,11 @@
        ------------------------------------------------------------------------- */
     btnReset.addEventListener("click", () => {
       clearErrors();
-      btnRemovePreview.click();
+      attachedFiles = [];
+      updateFilesUI();
       setTimeout(() => {
         syncUrgency();
         charCounter.textContent = "0 / 3000";
-        emailInput.value = "";
       }, 50);
     });
   </script>
