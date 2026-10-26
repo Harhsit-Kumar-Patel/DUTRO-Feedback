@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="DUTRO Help, Feedback & Troubleshooting Portal. Connected directly to live Google Sheets backend.">
-  <title>DUTRO | Help, Feedback &amp; Troubleshooting Portal</title>
+    content="Dutro Resolves - Enterprise Support, Feedback & Troubleshooting Portal. Connected directly to live Google Sheets backend.">
+  <title>Dutro Resolves | Help, Feedback &amp; Troubleshooting Portal</title>
 
   <!-- Google Font: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1069,7 +1069,7 @@
       <div class="card-header-main">
         <div class="header-text-group">
           <span class="header-eyebrow">Enterprise Support</span>
-          <h1 class="card-title-lg">DUTRO Feedbacks</h1>
+          <h1 class="card-title-lg">Dutro Resolves</h1>
           <p class="card-subtitle-desc">Share your feedback, report a bug, or suggest a new feature.</p>
         </div>
       </div>
@@ -1380,7 +1380,7 @@
   <script>
     /**
      * =========================================================================
-     * GOOGLE FORM & APPS SCRIPT CONFIGURATION (Form: "DUTRO Feedbacks")
+     * GOOGLE FORM & APPS SCRIPT CONFIGURATION (Form: "Dutro Resolves")
      * =========================================================================
      * 1. Direct Google Form POST:
      *    Action URL & Entry IDs from https://forms.gle/Xo3GkhgtUXhDFoub6
@@ -1718,6 +1718,8 @@
       btnSubmit.classList.add("loading");
       btnSubmit.disabled = true;
 
+      let serverTicketId = null;
+
       try {
         if (CONFIG.appsScriptUrl) {
           // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload up to 5)
@@ -1739,12 +1741,27 @@
           };
 
           // Await fetch so large screenshot payloads complete transmission before UI transition
-          await fetch(CONFIG.appsScriptUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
+          try {
+            const response = await fetch(CONFIG.appsScriptUrl, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(payload)
+            });
+            if (response.ok) {
+              const result = await response.json().catch(() => null);
+              if (result && result.ticketId) {
+                serverTicketId = result.ticketId;
+              }
+            }
+          } catch (fetchErr) {
+            console.warn("Direct fetch exception, attempting fallback:", fetchErr);
+            await fetch(CONFIG.appsScriptUrl, {
+              method: "POST",
+              mode: "no-cors",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(payload)
+            }).catch(e => console.warn("Fallback error:", e));
+          }
 
         } else {
           // Fallback to direct Form POST
@@ -1767,8 +1784,10 @@
         // Crisp, responsive transition (250ms) for instant feedback
         await new Promise(r => setTimeout(r, 250));
 
-        // Generate Ticket Reference
-        const ticketId = "#DUT-" + Math.floor(1000 + Math.random() * 9000);
+        // Generate Sequential Ticket Reference starting from 1 (server response or local sequence)
+        let localSeq = parseInt(localStorage.getItem("dutro_ticket_seq") || "0", 10) + 1;
+        localStorage.setItem("dutro_ticket_seq", localSeq);
+        const ticketId = serverTicketId || ("#DUT-" + localSeq);
 
         // Populate Receipt
         document.getElementById("receiptRefId").textContent = ticketId;

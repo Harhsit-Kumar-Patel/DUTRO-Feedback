@@ -1,6 +1,6 @@
-# DUTRO Help, Feedback & Troubleshooting Portal
+# Dutro Resolves - Enterprise Support, Feedback & Troubleshooting Portal
 
-A clean, modern, and responsive single-page web portal designed to match the **DUTRO Platform** design system, connected directly to your Google Form (**DUTRO Feedbacks**) and its linked Google Spreadsheet.
+A clean, modern, and responsive single-page web portal designed to match the **DUTRO Platform** design system, connected directly to your Google Form (**Dutro Resolves**) and its linked Google Spreadsheet.
 
 ---
 
@@ -33,7 +33,7 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 
 ## 📊 Connected Google Spreadsheet & Webhook
 
-- **Live Spreadsheet**: [DUTRO Feedbacks (Responses)](https://docs.google.com/spreadsheets/d/1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ/edit?gid=1229421619)
+- **Live Spreadsheet**: [Dutro Resolves (Responses)](https://docs.google.com/spreadsheets/d/1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ/edit?gid=1229421619)
 - **Google Apps Script Webhook Endpoint**:
   ```text
   https://script.google.com/macros/s/AKfycbxdJRwQdpLaDna3hf4FJ7V72JsYK1HrehpUMIaBNctEqHvTCB7kxkKaLv-iSkCwodsL/exec
@@ -54,7 +54,8 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 | **G** | `Category / Module` | `Category / Module *` | 14 Module Dropdown |
 | **H** | `Description` | `Description *` | Paragraph text |
 | **I** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 5) |
-| **J, K, L...** | `Screenshot Previews` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
+| **J** | `Ticket ID` | Generated sequentially | Text (`#DUT-1`, `#DUT-2`...) |
+| **K, L, M...** | `Screenshot Previews` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
 
 ---
 
