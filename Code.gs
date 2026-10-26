@@ -11,10 +11,10 @@ function doPost(e) {
     const uploadedUrls = [];
     const uploadedIds = [];
 
-    // 1. Collect files to process (supports up to 10 screenshots)
+    // 1. Collect files to process (supports up to 5 screenshots)
     const filesToProcess = [];
     if (Array.isArray(data.files) && data.files.length > 0) {
-      filesToProcess.push(...data.files.slice(0, 10)); // Maximum 10 screenshots
+      filesToProcess.push(...data.files.slice(0, 5)); // Maximum 5 screenshots
     } else if (data.fileData && data.fileName) {
       // Fallback for single-file payloads
       filesToProcess.push({
@@ -67,10 +67,10 @@ function doPost(e) {
 
     // 5. Append row: Columns A through I, followed by previews for EVERY image (J, K, L...)
     sheet.appendRow([
-      new Date(),                     // A: Timestamp
-      data.consultantName || "",      // B: Consultant Name
-      data.companyName || "",         // C: Company Name
-      data.requestType || "",         // D: Request Type
+      new Date(),                                 // A: Timestamp
+      data.consultantName || "",                  // B: Consultant Name
+      data.projectName || data.companyName || "", // C: Project Name
+      data.requestType || "",                     // D: Request Type
       data.urgency || "",             // E: Urgency Level
       data.title || "",               // F: Request Title
       data.category || "",            // G: Category / Module

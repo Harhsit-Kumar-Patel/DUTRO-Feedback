@@ -985,98 +985,6 @@
       color: var(--text-heading);
     }
 
-    /* Recent Feedback Submissions History Component */
-    .recent-feedback-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem 1.5rem;
-      box-shadow: var(--shadow-card);
-    }
-
-    .recent-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.85rem;
-    }
-
-    .recent-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-subtle);
-    }
-
-    .recent-count {
-      font-size: 0.76rem;
-      font-weight: 600;
-      color: var(--accent-blue);
-    }
-
-    .submissions-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
-
-    .submission-entry {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      padding: 0.55rem 0.75rem;
-      background-color: var(--bg-subtle);
-      border-radius: var(--radius-sm);
-      font-size: 0.82rem;
-    }
-
-    .entry-left {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      overflow: hidden;
-    }
-
-    .entry-tag {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-
-    .tag-bug {
-      background-color: var(--status-red-bg);
-      color: var(--status-red);
-    }
-
-    .tag-feature {
-      background-color: var(--accent-blue-subtle);
-      color: var(--accent-blue);
-    }
-
-    .tag-feedback {
-      background-color: var(--status-amber-bg);
-      color: var(--status-amber);
-    }
-
-    .entry-title-text {
-      font-weight: 500;
-      color: var(--text-heading);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 320px;
-    }
-
-    .entry-time {
-      font-size: 0.72rem;
-      color: var(--text-subtle);
-      white-space: nowrap;
-    }
 
     /* Toast Host */
     .toast-host {
@@ -1172,7 +1080,7 @@
         <!-- The Feedback Form -->
         <form id="feedbackForm" class="feedback-form" novalidate>
 
-          <!-- 1. Consultant Name & Company Name (2-Column Grid) -->
+          <!-- 1. Consultant Name & Project Name (2-Column Grid) -->
           <div class="form-row-2col">
             <div class="form-group-item" id="groupConsultant">
               <label class="field-label" for="consultantInput">
@@ -1183,13 +1091,13 @@
               <span class="validation-msg" id="errConsultant">Please enter your consultant name.</span>
             </div>
 
-            <div class="form-group-item" id="groupCompany">
-              <label class="field-label" for="companyInput">
-                Company Name <span class="required-star">*</span>
+            <div class="form-group-item" id="groupProject">
+              <label class="field-label" for="projectInput">
+                Project Name <span class="required-star">*</span>
               </label>
-              <input type="text" id="companyInput" class="text-input"
-                placeholder="e.g. Acme Corporation" autocomplete="organization" required>
-              <span class="validation-msg" id="errCompany">Please enter company name.</span>
+              <input type="text" id="projectInput" class="text-input"
+                placeholder="e.g. Risk Assessment Portal" autocomplete="off" required>
+              <span class="validation-msg" id="errProject">Please enter project name.</span>
             </div>
           </div>
 
@@ -1348,13 +1256,13 @@
             <span class="validation-msg" id="errDesc">Please describe the issue or suggestion.</span>
           </div>
 
-          <!-- 6. Upload a Screenshot (Dropzone + Clipboard Paste + File Select up to 10) -->
+          <!-- 6. Upload a Screenshot (Dropzone + Clipboard Paste + File Select up to 5) -->
           <div class="form-group-item" id="groupScreenshot">
             <div class="field-row-header">
               <label class="field-label">
                 Upload a Screenshot <span class="required-star">*</span>
               </label>
-              <span class="field-hint-text">Up to 10 screenshots (PNG, JPG, WebP)</span>
+              <span class="field-hint-text">Up to 5 screenshots (PNG, JPG, WebP)</span>
             </div>
 
             <div class="dropzone-container" id="dropzoneContainer">
@@ -1368,14 +1276,14 @@
                   </svg>
                 </div>
                 <div class="dropzone-main-text">
-                  Drag &amp; drop screenshots here (up to 10), <span>browse files</span>, or paste (Ctrl/Cmd+V)
+                  Drag &amp; drop screenshots here (up to 5), <span>browse files</span>, or paste (Ctrl/Cmd+V)
                 </div>
                 <div class="dropzone-sub-text">Attaching visual screenshots speeds up issue diagnosis</div>
               </div>
             </div>
 
             <!-- Multi-file Counter & Preview List -->
-            <div class="files-counter-badge" id="filesCounterBadge">0 / 10 screenshots attached</div>
+            <div class="files-counter-badge" id="filesCounterBadge">0 / 5 screenshots attached</div>
             <div class="files-preview-list" id="filesPreviewList"></div>
           </div>
 
@@ -1422,8 +1330,8 @@
               <span class="receipt-value" id="receiptConsultant">—</span>
             </div>
             <div class="receipt-item-row">
-              <span class="receipt-label">Company</span>
-              <span class="receipt-value" id="receiptCompany">—</span>
+              <span class="receipt-label">Project</span>
+              <span class="receipt-value" id="receiptProject">—</span>
             </div>
             <div class="receipt-item-row">
               <span class="receipt-label">Request Type</span>
@@ -1455,15 +1363,6 @@
 
       </div>
 
-    </section>
-
-    <!-- Recent Session Feedback History Card -->
-    <section class="recent-feedback-card" id="recentHistoryCard" style="display:none;">
-      <div class="recent-header">
-        <span class="recent-title">Recent Submissions in this session</span>
-        <span class="recent-count" id="recentCountText">0 logged</span>
-      </div>
-      <div class="submissions-list" id="submissionsList"></div>
     </section>
 
   </main>
@@ -1513,7 +1412,7 @@
     const urgencySliderBox = document.getElementById("urgencySliderBox");
     const requestTypeInputs = document.querySelectorAll('input[name="requestType"]');
     const consultantInput = document.getElementById("consultantInput");
-    const companyInput = document.getElementById("companyInput");
+    const projectInput = document.getElementById("projectInput");
     const titleInput = document.getElementById("requestTitleInput");
     const categorySelect = document.getElementById("categorySelect");
     const descInput = document.getElementById("descInput");
@@ -1523,7 +1422,8 @@
     const successView = document.getElementById("successView");
     const btnSubmitAnother = document.getElementById("btnSubmitAnother");
 
-    // Screenshot Uploader (Up to 10 screenshots)
+    // Screenshot Uploader (Up to 5 screenshots)
+    const MAX_FILES = 5;
     const dropzoneContainer = document.getElementById("dropzoneContainer");
     const screenshotFileInput = document.getElementById("screenshotFileInput");
     const filesPreviewList = document.getElementById("filesPreviewList");
@@ -1532,12 +1432,6 @@
 
     // Theme Switch
     const themeSwitchBtn = document.getElementById("themeSwitchBtn");
-
-    // Recent History
-    const recentHistoryCard = document.getElementById("recentHistoryCard");
-    const recentCountText = document.getElementById("recentCountText");
-    const submissionsList = document.getElementById("submissionsList");
-    let loggedSubmissionsCount = 0;
 
     /* -------------------------------------------------------------------------
        Theme Toggle (Light default matching DUTRO reference + Dark mode)
@@ -1574,13 +1468,13 @@
     });
 
     /* -------------------------------------------------------------------------
-       Multi-Screenshot Handling (Up to 10 Screenshots)
+       Multi-Screenshot Handling (Up to 5 Screenshots)
        ------------------------------------------------------------------------- */
     function updateFilesUI() {
       filesPreviewList.innerHTML = "";
       if (attachedFiles.length > 0) {
         filesCounterBadge.style.display = "inline-block";
-        filesCounterBadge.textContent = `${attachedFiles.length} / 10 screenshots attached`;
+        filesCounterBadge.textContent = `${attachedFiles.length} / ${MAX_FILES} screenshots attached`;
       } else {
         filesCounterBadge.style.display = "none";
       }
@@ -1615,15 +1509,15 @@
     }
 
     async function processUploadedFiles(fileList) {
-      const remainingSlots = 10 - attachedFiles.length;
+      const remainingSlots = MAX_FILES - attachedFiles.length;
       if (remainingSlots <= 0) {
-        showToast("Maximum 10 screenshots allowed.", "error");
+        showToast(`Maximum ${MAX_FILES} screenshots allowed.`, "error");
         return;
       }
 
       const filesToAdd = Array.from(fileList).slice(0, remainingSlots);
       if (fileList.length > remainingSlots) {
-        showToast(`Only ${remainingSlots} more screenshot(s) could be added (max 10).`, "info");
+        showToast(`Only ${remainingSlots} more screenshot(s) could be added (max ${MAX_FILES}).`, "info");
       }
 
       for (const file of filesToAdd) {
@@ -1739,9 +1633,9 @@
         isValid = false;
       }
 
-      if (!companyInput.value.trim()) {
-        document.getElementById("groupCompany").classList.add("has-error");
-        if (!firstError) firstError = companyInput;
+      if (!projectInput.value.trim()) {
+        document.getElementById("groupProject").classList.add("has-error");
+        if (!firstError) firstError = projectInput;
         isValid = false;
       }
 
@@ -1767,7 +1661,7 @@
       return isValid;
     }
 
-    [consultantInput, companyInput, titleInput, categorySelect, descInput].forEach(field => {
+    [consultantInput, projectInput, titleInput, categorySelect, descInput].forEach(field => {
       field.addEventListener("input", () => field.closest(".form-group-item")?.classList.remove("has-error"));
       field.addEventListener("change", () => field.closest(".form-group-item")?.classList.remove("has-error"));
     });
@@ -1812,7 +1706,7 @@
       }
 
       const consultantName = consultantInput.value.trim();
-      const companyName = companyInput.value.trim();
+      const projectName = projectInput.value.trim();
       const requestType = document.querySelector('input[name="requestType"]:checked')?.value || "General Feedback";
       const urgency = requestType === "Bug / Technical Issue"
         ? (document.querySelector('input[name="urgencyLevel"]:checked')?.value || "Medium")
@@ -1826,10 +1720,11 @@
 
       try {
         if (CONFIG.appsScriptUrl) {
-          // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload up to 10)
+          // 1. Submit via Google Apps Script Webhook (Direct Google Sheet row + Drive file upload up to 5)
           const payload = {
             consultantName,
-            companyName,
+            projectName,
+            companyName: projectName, // ensures 100% compatibility with currently deployed Apps Script
             requestType,
             urgency,
             title,
@@ -1878,31 +1773,11 @@
         // Populate Receipt
         document.getElementById("receiptRefId").textContent = ticketId;
         document.getElementById("receiptConsultant").textContent = consultantName;
-        document.getElementById("receiptCompany").textContent = companyName;
+        document.getElementById("receiptProject").textContent = projectName;
         document.getElementById("receiptType").textContent = requestType;
         document.getElementById("receiptCat").textContent = category;
         document.getElementById("receiptUrg").textContent = urgency;
         document.getElementById("receiptScreenshots").textContent = `${attachedFiles.length} attached`;
-
-        // Add to Session History
-        loggedSubmissionsCount++;
-        recentHistoryCard.style.display = "block";
-        recentCountText.textContent = `${loggedSubmissionsCount} logged`;
-
-        let tagClass = "tag-feedback";
-        if (requestType.includes("Bug")) tagClass = "tag-bug";
-        else if (requestType.includes("Feature")) tagClass = "tag-feature";
-
-        const entry = document.createElement("div");
-        entry.className = "submission-entry";
-        entry.innerHTML = `
-          <div class="entry-left">
-            <span class="entry-tag ${tagClass}">${requestType}</span>
-            <span class="entry-title-text" title="${title}">${title}</span>
-          </div>
-          <span class="entry-time">Just now</span>
-        `;
-        submissionsList.insertBefore(entry, submissionsList.firstChild);
 
         // Reset Inputs
         form.reset();

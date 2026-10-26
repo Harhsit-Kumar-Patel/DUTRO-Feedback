@@ -16,20 +16,18 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
   - Focused, centered enterprise card layout (`max-width: 780px`)
   - **8 Pure Feedback Fields**:
     1. **Consultant Name \***: Short text input
-    2. **Company Name \***: Short text input
+    2. **Project Name \***: Short text input
     3. **Request Type \***: 3-option pill toggle (`Bug / Technical Issue`, `Feature Suggestion`, `General Feedback`)
     4. **Urgency Level \***: Dynamic selector (`Low`, `Medium`, `High / Urgent` - revealed when Bug is selected)
     5. **Request Title \***: Short text input
     6. **Category / Module \***: Dropdown with 14 module options (Company Profile, Global Framework, Dashboard, Data Lineage, Workspace, Discovery, Vendors, Evidence Bank, Gap Analysis, Reports, Compliance Log, Regulatory Intelligence, Cookie Consent, Universal Consent)
     7. **Description \***: Paragraph textarea with live character counter (`0 / 3000`)
-    8. **Upload a Screenshot \***: Multi-file drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) for **up to 10 screenshots** with individual remove controls and auto-compression
+    8. **Upload a Screenshot \***: Multi-file drag & drop zone, file browser, and direct clipboard image paste (`Ctrl/Cmd+V`) for **up to 5 screenshots** with individual remove controls and auto-compression
   - Action buttons: `Clear` and `Submit Feedback` (with instant non-blocking background dispatch)
 - **In-Page Confirmation State**:
   - Reference ticket code generation (e.g. `#DUT-6191`)
-  - Full receipt summary with Consultant Name, Company Name, and attached screenshot count
+  - Full receipt summary with Consultant Name, Project Name, and attached screenshot count
   - `Submit Another Request` action
-- **Session Submissions Feed**:
-  - Real-time logging of submissions completed during the user's active session
 
 ---
 
@@ -49,14 +47,14 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 | :--- | :--- | :--- | :--- |
 | **A** | `Timestamp` | Generated dynamically | Datetime |
 | **B** | `Consultant Name` | `Consultant Name *` | Text |
-| **C** | `Company Name` | `Company Name *` | Text |
+| **C** | `Project Name` | `Project Name *` | Text |
 | **D** | `Request Type` | `Request Type *` | Multiple choice |
 | **E** | `Urgency Level` | `Urgency Level *` | Multiple choice (or N/A) |
 | **F** | `Request Title` | `Request Title *` | Text |
 | **G** | `Category / Module` | `Category / Module *` | 14 Module Dropdown |
 | **H** | `Description` | `Description *` | Paragraph text |
-| **I** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 10) |
-| **J** | `Screenshot Preview` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
+| **I** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 5) |
+| **J, K, L...** | `Screenshot Previews` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
 
 ---
 
