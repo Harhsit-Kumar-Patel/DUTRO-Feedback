@@ -1842,6 +1842,25 @@
         charCounter.textContent = "0 / 3000";
       }, 50);
     });
+
+    /* -------------------------------------------------------------------------
+       Sync Live Request Count with Google Sheets on Page Load
+       ------------------------------------------------------------------------- */
+    async function syncLiveTicketSequence() {
+      if (!CONFIG.appsScriptUrl) return;
+      try {
+        const res = await fetch(CONFIG.appsScriptUrl);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.totalRequests !== undefined) {
+            localStorage.setItem("dutro_ticket_seq", data.totalRequests);
+          }
+        }
+      } catch (err) {
+        // Silently keep existing sequence counter
+      }
+    }
+    syncLiveTicketSequence();
   </script>
 </body>
 

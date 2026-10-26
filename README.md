@@ -46,15 +46,15 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 | Column | Header on Sheet | Field on Portal | Format |
 | :--- | :--- | :--- | :--- |
 | **A** | `Timestamp` | Generated dynamically | Datetime |
-| **B** | `Consultant Name` | `Consultant Name *` | Text |
-| **C** | `Project Name` | `Project Name *` | Text |
-| **D** | `Request Type` | `Request Type *` | Multiple choice |
-| **E** | `Urgency Level` | `Urgency Level *` | Multiple choice (or N/A) |
-| **F** | `Request Title` | `Request Title *` | Text |
-| **G** | `Category / Module` | `Category / Module *` | 14 Module Dropdown |
-| **H** | `Description` | `Description *` | Paragraph text |
-| **I** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 5) |
-| **J** | `Ticket ID` | Generated sequentially | Text (`#DUT-1`, `#DUT-2`...) |
+| **B** | `Ticket ID` | Generated sequentially | Text (`#DUT-1`, `#DUT-2`...) |
+| **C** | `Consultant Name` | `Consultant Name *` | Text |
+| **D** | `Project Name` | `Project Name *` | Text |
+| **E** | `Request Type` | `Request Type *` | Multiple choice |
+| **F** | `Urgency Level` | `Urgency Level *` | Multiple choice (or N/A) |
+| **G** | `Request Title` | `Request Title *` | Text |
+| **H** | `Category / Module` | `Category / Module *` | 14 Module Dropdown |
+| **I** | `Description` | `Description *` | Paragraph text |
+| **J** | `Upload a Screenshot` | `Upload a Screenshot *` | Comma-separated Drive URLs (up to 5) |
 | **K, L, M...** | `Screenshot Previews` | Generated dynamically | `=IMAGE("https://drive.google.com/thumbnail?id=...&sz=w1000", 1)` |
 
 ---

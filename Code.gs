@@ -60,45 +60,47 @@ function doPost(e) {
     // 3. Locate sheet (works for both container-bound and standalone scripts)
     const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
-    // 4. Calculate Sequential Ticket ID (Starting from 1)
-    let ticketSeq = Math.max(1, nextRow - 1);
-    if (nextRow > 2) {
-      try {
-        const prevTicket = sheet.getRange(nextRow - 1, 10).getValue();
-        const match = String(prevTicket).match(/\d+/);
-        if (match) {
-          ticketSeq = parseInt(match[0], 10) + 1;
+    const nextRow = sheet.getLastRow() + 1;
+
+    // 4. Calculate Sequential Ticket ID (Starting from 1 based on actual submissions)
+    let submissionCount = 0;
+    const lastRow = sheet.getLastRow();
+    if (lastRow >= 2) {
+      const colAValues = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+      for (let i = 0; i < colAValues.length; i++) {
+        const val = colAValues[i][0];
+        if (val !== "" && val !== null && val !== undefined) {
+          submissionCount++;
         }
-      } catch (e) {
-        console.warn("Ticket seq detection fallback: " + e);
       }
     }
+    const ticketSeq = submissionCount + 1;
     const ticketId = "#DUT-" + ticketSeq;
 
     // 5. Prepare preview formulas for ALL uploaded images (Columns K, L, M...)
     const previewFormulas = uploadedIds.map(id => `=IFERROR(IMAGE("https://drive.google.com/thumbnail?id=${id}&sz=w1000", 1), "")`);
 
-    // Ensure header in Column J if not present
+    // Ensure header in Column B if not present
     try {
-      if (sheet.getRange(1, 10).getValue() === "") {
-        sheet.getRange(1, 10).setValue("Ticket ID");
+      if (sheet.getRange(1, 2).getValue() === "") {
+        sheet.getRange(1, 2).setValue("Ticket ID");
       }
     } catch (hdrErr) {
       console.warn("Header check: " + hdrErr);
     }
 
-    // 6. Append row: Columns A through I, Column J (Ticket ID), followed by previews for EVERY image (K, L...)
+    // 6. Append row: Column A (Timestamp), Column B (Ticket ID), followed by C through J and image previews
     sheet.appendRow([
       new Date(),                                 // A: Timestamp
-      data.consultantName || "",                  // B: Consultant Name
-      data.projectName || data.companyName || "", // C: Project Name
-      data.requestType || "",                     // D: Request Type
-      data.urgency || "",                         // E: Urgency Level
-      data.title || "",                           // F: Request Title
-      data.category || "",                        // G: Category / Module
-      data.description || "",                     // H: Description
-      fileUrl,                                    // I: Upload a Screenshot (comma-separated URLs)
-      ticketId,                                   // J: Ticket ID (#DUT-1, #DUT-2...)
+      ticketId,                                   // B: Ticket ID (just after timestamp!)
+      data.consultantName || "",                  // C: Consultant Name
+      data.projectName || data.companyName || "", // D: Project Name
+      data.requestType || "",                     // E: Request Type
+      data.urgency || "",                         // F: Urgency Level
+      data.title || "",                           // G: Request Title
+      data.category || "",                        // H: Category / Module
+      data.description || "",                     // I: Description
+      fileUrl,                                    // J: Upload a Screenshot (comma-separated URLs)
       ...previewFormulas                          // K, L, M... Previews for every image!
     ]);
 
@@ -109,6 +111,7 @@ function doPost(e) {
       status: "success",
       ticketId: ticketId,
       ticketNumber: ticketSeq,
+      totalRequests: ticketSeq,
       count: uploadedUrls.length,
       fileUrls: uploadedUrls,
       fileUrl: fileUrl
@@ -125,6 +128,36 @@ function doPost(e) {
   }
 }
 
+// GET endpoint: Lets the website fetch the live total count of requests directly from Google Sheets!
+function doGet(e) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+    let totalCount = 0;
+    const lastRow = sheet.getLastRow();
+    if (lastRow >= 2) {
+      const colAValues = sheet.getRange(2, 1, lastRow - 1, 1).getValues();
+      for (let i = 0; i < colAValues.length; i++) {
+        const val = colAValues[i][0];
+        if (val !== "" && val !== null && val !== undefined) {
+          totalCount++;
+        }
+      }
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      totalRequests: totalCount,
+      nextTicketId: "#DUT-" + (totalCount + 1)
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      message: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 // STEP 1 HELPER: Run this function in the Apps Script editor to authorize Google Drive & test folder permissions
 function testDriveAccess() {
   const folder = DriveApp.getFolderById(FOLDER_ID);
@@ -133,14 +166,14 @@ function testDriveAccess() {
   Logger.log("SUCCESS! Created file: " + file.getUrl());
 }
 
-// STEP 2 HELPER: Run this function once in Apps Script to automatically fill Column J with #DUT-1, #DUT-2... for all existing rows in your sheet!
+// STEP 2 HELPER: Run this function once in Apps Script to automatically fill Column B with #DUT-1, #DUT-2... for all existing rows in your sheet!
 function fillTicketIdsForExistingRows() {
   const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
   const lastRow = sheet.getLastRow();
   
-  // Set Column J header
-  sheet.getRange(1, 10).setValue("Ticket ID");
+  // Set Column B header
+  sheet.getRange(1, 2).setValue("Ticket ID");
   
   if (lastRow < 2) {
     Logger.log("No data rows found.");
@@ -149,11 +182,12 @@ function fillTicketIdsForExistingRows() {
   
   let count = 0;
   for (let r = 2; r <= lastRow; r++) {
-    const current = sheet.getRange(r, 10).getValue();
+    const current = sheet.getRange(r, 2).getValue();
     if (!current || String(current).trim() === "") {
-      sheet.getRange(r, 10).setValue("#DUT-" + (r - 1));
+      sheet.getRange(r, 2).setValue("#DUT-" + (r - 1));
       count++;
     }
   }
-  Logger.log("Updated " + count + " existing rows with Ticket IDs.");
+  Logger.log("Updated " + count + " existing rows with Ticket IDs in Column B.");
 }
+
