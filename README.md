@@ -1,6 +1,6 @@
-# Dutro Resolves - Enterprise Support, Feedback & Troubleshooting Portal
+# Dutro Resolve - Enterprise Support, Feedback & Troubleshooting Portal
 
-A clean, modern, and responsive single-page web portal designed to match the **DUTRO Platform** design system, connected directly to your Google Form (**Dutro Resolves**) and its linked Google Spreadsheet.
+A clean, modern, and responsive single-page web portal designed to match the **DUTRO Platform** design system, connected directly to your Google Form (**Dutro Resolve**) and its linked Google Spreadsheet.
 
 ---
 
@@ -33,7 +33,7 @@ All unrelated dummy platform navigation and mock assessment cards have been remo
 
 ## 📊 Connected Google Spreadsheet & Webhook
 
-- **Live Spreadsheet**: [Dutro Resolves (Responses)](https://docs.google.com/spreadsheets/d/1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ/edit?gid=1229421619)
+- **Live Spreadsheet**: [Dutro Resolve (Responses)](https://docs.google.com/spreadsheets/d/1MnCgjj6SRIufY-xm0ZJcGTblc1ygGvBMC7TizwRXXZQ/edit?gid=1229421619)
 - **Google Apps Script Webhook Endpoint**:
   ```text
   https://script.google.com/macros/s/AKfycbxdJRwQdpLaDna3hf4FJ7V72JsYK1HrehpUMIaBNctEqHvTCB7kxkKaLv-iSkCwodsL/exec
