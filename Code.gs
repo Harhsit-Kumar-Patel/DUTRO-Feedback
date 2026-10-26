@@ -43,7 +43,8 @@ function doPost(e) {
               console.warn("Share warning: " + shareErr);
             }
 
-            uploadedUrls.push(file.getUrl());
+            // Match Google Form URL format exactly: https://drive.google.com/open?id=...
+            uploadedUrls.push("https://drive.google.com/open?id=" + file.getId());
             uploadedIds.push(file.getId());
           } catch (fileErr) {
             console.error("Error creating file " + (i + 1) + ": " + fileErr);
@@ -55,19 +56,16 @@ function doPost(e) {
     }
 
     const fileUrl = uploadedUrls.length > 0 ? uploadedUrls.join(", ") : "N/A";
-    const primaryFileId = uploadedIds.length > 0 ? uploadedIds[0] : "";
 
     // 3. Locate sheet (works for both container-bound and standalone scripts)
     const ss = SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
     const nextRow = sheet.getLastRow() + 1;
 
-    // 4. Prepare preview formula for first image (Column J)
-    const previewFormula = primaryFileId 
-      ? `=IFERROR(IMAGE("https://drive.google.com/thumbnail?id=${primaryFileId}&sz=w1000", 1), "")` 
-      : "";
+    // 4. Prepare preview formulas for ALL uploaded images (Columns J, K, L, M...)
+    const previewFormulas = uploadedIds.map(id => `=IFERROR(IMAGE("https://drive.google.com/thumbnail?id=${id}&sz=w1000", 1), "")`);
 
-    // 5. Append row matching new Columns A through J
+    // 5. Append row: Columns A through I, followed by previews for EVERY image (J, K, L...)
     sheet.appendRow([
       new Date(),                     // A: Timestamp
       data.consultantName || "",      // B: Consultant Name
@@ -78,7 +76,7 @@ function doPost(e) {
       data.category || "",            // G: Category / Module
       data.description || "",         // H: Description
       fileUrl,                        // I: Upload a Screenshot (comma-separated URLs)
-      previewFormula                  // J: Screenshot Preview (first image)
+      ...previewFormulas              // J, K, L... Previews for every image!
     ]);
 
     // Set row height to 100 so thumbnails and text fit cleanly
